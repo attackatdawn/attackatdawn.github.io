@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>文旅乐 · 预授信智能评分驾驶舱</title>
+  <title>文旅乐贷 · 预授信系统</title>
   <style>
     :root{
       --bg:#06111f;
@@ -958,7 +958,7 @@
 - 酒店预填：新63家酒店运营数据(预核额)0806.xlsx
 - 评分规则：预授信评分卡(1).xlsx
 - 运营评分项严格使用“房间数”，不使用 RevPar。
-- 手机端申请额度默认及酒店联动后保持为空；最终建议授信额度仍独立按 min(OTA年收入 × 40% × 综合得分对应评级系数, 1000万元) 实时计算。
+- 最终建议授信额度 = min(OTA年收入 × 40% × 综合得分对应评级系数, 1000万元)。
 -->
 
 <div class="app">
@@ -1021,7 +1021,7 @@
         <div class="panel-head"><div class="panel-title"><span class="section-index">03</span><div><h2>经营运营能力</h2><small>入住表现、平台口碑、价格与规模</small></div></div><span class="score-chip"><b id="operationChip">42</b> / 50</span></div>
         <div class="panel-body">
           <div class="score-list">
-            <div class="score-row"><div class="score-name"><b>近12月平均入住率</b><small>≥75% 20分；65%–75% 15分；45%–55% 10分；＜45% 0分</small></div><div class="control-line"><input id="occupancy" type="range" min="0" max="100" step="0.1" value="82.8"><span class="value-bubble"><b id="occupancyValue">78</b>%</span></div><div class="points"><b id="occupancyPoints">20</b><span> / 20</span></div></div>
+            <div class="score-row"><div class="score-name"><b>近12月平均入住率</b><small>≥75% 20分；65%–75% 15分；45%–55% 10分；＜45% 0分</small></div><div class="control-line"><input id="occupancy" type="range" min="0" max="120" step="0.1" value="82.8"><span class="value-bubble"><b id="occupancyValue">78</b>%</span></div><div class="points"><b id="occupancyPoints">20</b><span> / 20</span></div></div>
             <div class="score-row"><div class="score-name"><b>平台综合评分</b><small>≥4.8分 10分；≥4.6分 8分；≥4.3分 5分</small></div><div class="control-line"><input id="platformRating" type="range" min="3" max="5" step="0.1" value="4.7"><span class="value-bubble"><b id="ratingValue">4.7</b>&nbsp;分</span></div><div class="points"><b id="ratingPoints">8</b><span> / 10</span></div></div>
             <div class="score-row"><div class="score-name"><b>房间均价</b><small>≥400元 10分；≥300元 7分；≥200元 5分；＜200元 2分</small></div><div class="control-line"><input id="roomPrice" type="range" min="80" max="1000" step="1" value="573"><span class="value-bubble">¥&nbsp;<b id="priceValue">380</b></span></div><div class="points"><b id="pricePoints">7</b><span> / 10</span></div></div>
             <div class="score-row"><div class="score-name"><b>房间数</b><small>≥100间 10分；≥80间 7分；≥60间 5分；＜60间 2分</small></div><div class="control-line"><input id="roomCount" type="range" min="0" max="250" step="1" value="134"><span class="value-bubble"><b id="roomValue">134</b>&nbsp;间</span></div><div class="points"><b id="roomPoints">10</b><span> / 10</span></div></div>
@@ -1250,7 +1250,7 @@ function applyHotel(h,isReset=false){
   $('entityName').value=h.brand||'';
   $('licenseNo').value=h.hotelId||'';
   $('establishedDate').value=h.openDate||'';
-  $('preCredit').value=window.matchMedia('(max-width: 780px)').matches ? '' : Number((h.applicationAmount||0).toFixed(1));
+  $('preCredit').value=Number((h.applicationAmount||0).toFixed(1));
 
   const typeId=mapHotelType(h.position);
   if($(typeId)) $(typeId).checked=true;
@@ -1699,9 +1699,6 @@ input[type=text],input[type=number],input[type=date],select{
     const resultPanel = document.querySelector('.sidebar > .result-panel');
     const modal = document.getElementById('reportModal');
     if(wizard) wizard.style.display = 'flex';
-    const mobilePreCredit = document.getElementById('preCredit');
-    if(mobilePreCredit) mobilePreCredit.value = '';
-    if(typeof update === 'function') update();
 
     if(panels[0] && !screen1.contains(panels[0])) screen1.appendChild(panels[0]);
     [panels[1], panels[2], panels[3], panels[4]].forEach(function(el){ if(el && !screen2.contains(el)) screen2.appendChild(el); });
