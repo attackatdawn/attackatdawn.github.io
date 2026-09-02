@@ -1,190 +1,1859 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>饶熠舟的主页</title>
-    <link rel="stylesheet" href="static/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.1.0/remodal.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.1.0/remodal-default-theme.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.1.0/remodal.min.js"></script>
-    <script src="static/js/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文旅乐 · 预授信智能评分驾驶舱</title>
+  <style>
+    :root{
+      --bg:#06111f;
+      --bg2:#091a2c;
+      --panel:rgba(12,31,51,.82);
+      --panel2:rgba(15,39,63,.68);
+      --line:rgba(116,199,255,.16);
+      --line-strong:rgba(97,218,251,.38);
+      --text:#eaf7ff;
+      --muted:#8fa9bd;
+      --cyan:#51dcff;
+      --blue:#4e8cff;
+      --green:#40e6a0;
+      --yellow:#ffc857;
+      --red:#ff6b7c;
+      --shadow:0 24px 70px rgba(0,0,0,.34);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+      background:
+        radial-gradient(circle at 80% -5%, rgba(49,130,246,.20), transparent 34%),
+        radial-gradient(circle at 12% 12%, rgba(30,215,255,.11), transparent 26%),
+        linear-gradient(145deg,#040c17 0%,#071526 52%,#06101d 100%);
+      min-height:100vh;
+    }
+    body::before{
+      content:""; position:fixed; inset:0; pointer-events:none; opacity:.24;
+      background-image:linear-gradient(rgba(112,190,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(112,190,255,.05) 1px,transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(to bottom,black,transparent 78%);
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .app{max-width:1500px;margin:0 auto;padding:0 28px 46px;position:relative}
+    .topbar{
+      height:78px;display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid var(--line);backdrop-filter:blur(18px);position:sticky;top:0;z-index:20;
+      background:linear-gradient(180deg,rgba(5,16,29,.94),rgba(5,16,29,.72));
+    }
+    .brand{display:flex;align-items:center;gap:13px}
+    .brand-mark{width:42px;height:42px;border-radius:13px;position:relative;display:grid;place-items:center;background:linear-gradient(145deg,#173b63,#0f2541);border:1px solid rgba(89,219,255,.45);box-shadow:0 0 30px rgba(57,201,255,.16) inset,0 0 20px rgba(50,180,255,.10)}
+    .brand-mark svg{width:25px;height:25px}
+    .brand strong{display:block;font-size:16px;letter-spacing:.5px}
+    .brand span{display:block;color:var(--muted);font-size:11px;margin-top:3px;letter-spacing:1.4px}
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .status-pill,.demo-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:#b9d4e6;font-size:12px;background:rgba(8,27,46,.65)}
+    .status-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green)}
+    .demo-pill{color:var(--cyan);border-color:rgba(81,220,255,.26)}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:32px 0 24px}
+    .eyebrow{color:var(--cyan);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+    h1{margin:0;font-size:clamp(28px,3vw,43px);letter-spacing:-1px;line-height:1.15}
+    .hero p{max-width:760px;color:var(--muted);line-height:1.7;margin:12px 0 0;font-size:14px}
+    .hero-kpis{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .mini-kpi{min-width:108px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(10,31,52,.56)}
+    .mini-kpi span{font-size:11px;color:var(--muted);display:block}
+    .mini-kpi b{font-size:18px;margin-top:5px;display:block}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:22px;align-items:start}
+    .main-column{display:flex;flex-direction:column;gap:18px}
+    .panel{border:1px solid var(--line);background:linear-gradient(145deg,rgba(12,31,51,.88),rgba(8,24,41,.76));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .panel::after{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,225,255,.48),transparent)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;border-bottom:1px solid var(--line)}
+    .panel-title{display:flex;align-items:center;gap:12px}
+    .section-index{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(63,165,255,.12);border:1px solid rgba(75,198,255,.30);color:var(--cyan);font-size:12px;font-weight:700}
+    .panel-title h2{font-size:17px;margin:0}.panel-title small{display:block;color:var(--muted);font-size:11px;margin-top:4px;font-weight:400}
+    .score-chip{font-size:12px;color:#c9ebff;padding:7px 10px;border-radius:999px;border:1px solid rgba(81,220,255,.22);background:rgba(31,138,183,.10)}
+    .panel-body{padding:22px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .field{display:flex;flex-direction:column;gap:8px}.field.full{grid-column:1/-1}
+    .field label{font-size:12px;color:#b8ccda;display:flex;align-items:center;justify-content:space-between}
+    .field label em{color:#627e92;font-style:normal;font-size:11px}
+    input[type=text],input[type=number],input[type=date],select{
+      width:100%;height:44px;border-radius:11px;border:1px solid rgba(132,198,236,.17);background:rgba(5,20,35,.78);color:var(--text);outline:none;padding:0 13px;transition:.2s;
+    }
+    input:focus,select:focus{border-color:rgba(81,220,255,.56);box-shadow:0 0 0 3px rgba(81,220,255,.08)}
+    input::placeholder{color:#547086}
+    .segmented{display:grid;grid-template-columns:repeat(var(--cols,3),1fr);gap:9px}
+    .segmented input{display:none}.segmented label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:8px 10px;border-radius:11px;border:1px solid rgba(132,198,236,.16);background:rgba(5,20,35,.62);font-size:12px;color:#9fb7c9;transition:.2s;cursor:pointer}
+    .segmented input:checked+label{color:#eafbff;border-color:rgba(81,220,255,.57);background:linear-gradient(145deg,rgba(26,139,194,.25),rgba(36,97,181,.20));box-shadow:0 0 18px rgba(71,202,255,.08) inset}
+    .switch-row{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:13px 14px;border:1px solid rgba(132,198,236,.16);border-radius:12px;background:rgba(5,20,35,.54)}
+    .switch-copy b{font-size:13px}.switch-copy small{display:block;color:var(--muted);margin-top:4px}
+    .switch{position:relative;width:48px;height:26px;flex:none}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;background:#17324a;border:1px solid rgba(255,255,255,.09);transition:.25s}.slider::before{content:"";position:absolute;width:19px;height:19px;border-radius:50%;left:3px;top:2px;background:#7d97a9;transition:.25s}.switch input:checked+.slider{background:rgba(36,197,133,.25);border-color:rgba(64,230,160,.55)}.switch input:checked+.slider::before{transform:translateX(21px);background:var(--green);box-shadow:0 0 12px rgba(64,230,160,.65)}
+    .score-list{display:flex;flex-direction:column;gap:12px}
+    .score-row{display:grid;grid-template-columns:minmax(190px,1.2fr) minmax(260px,1fr) 68px;gap:15px;align-items:center;padding:14px 0;border-bottom:1px dashed rgba(132,198,236,.11)}
+    .score-row:last-child{border-bottom:0}.score-name b{display:block;font-size:13px}.score-name small{display:block;color:var(--muted);font-size:11px;margin-top:5px;line-height:1.5}.points{text-align:right}.points b{font-size:17px;color:var(--cyan)}.points span{font-size:11px;color:#587386}
+    .control-line{display:flex;align-items:center;gap:12px}.control-line input[type=range]{flex:1;accent-color:var(--cyan)}.value-bubble{min-width:74px;height:38px;border:1px solid rgba(132,198,236,.18);border-radius:10px;background:rgba(4,18,32,.72);display:flex;align-items:center;justify-content:center;color:#dff8ff;font-size:12px}
+    .score-foot{margin-top:14px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.score-foot span{color:var(--muted);font-size:12px}.score-foot strong{font-size:24px;color:#fff}.score-foot strong em{font-size:12px;color:var(--muted);font-style:normal;font-weight:400}
+    .decision-check{padding:15px;border-radius:13px;border:1px solid rgba(255,107,124,.20);background:rgba(255,107,124,.045)}
+    .danger-text{color:#ff9baa!important}
+    .sidebar{position:sticky;top:98px;display:flex;flex-direction:column;gap:18px}
+    .result-panel{padding:22px;background:linear-gradient(155deg,rgba(12,35,58,.96),rgba(7,22,39,.92))}
+    .result-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.result-top h3{margin:0;font-size:15px}.live{font-size:11px;color:var(--green);display:flex;align-items:center;gap:6px}.live i{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green)}
+    .gauge-wrap{display:grid;place-items:center;margin:22px 0 19px}.gauge{--score:87;position:relative;width:182px;height:182px;border-radius:50%;background:conic-gradient(var(--gauge-color,var(--cyan)) calc(var(--score)*1%),rgba(104,154,184,.12) 0);display:grid;place-items:center;filter:drop-shadow(0 0 18px rgba(74,205,255,.13));transition:.45s}
+    .gauge::before{content:"";width:145px;height:145px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#102f4d,#071a2d 68%);border:1px solid rgba(144,213,255,.16);box-shadow:0 0 28px rgba(0,0,0,.28) inset}
+    .gauge-content{position:absolute;text-align:center}.gauge-score{font-size:46px;line-height:1;font-weight:760;letter-spacing:-2px}.gauge-score small{font-size:15px;color:var(--muted);font-weight:500;letter-spacing:0}.gauge-content span{display:block;font-size:11px;color:var(--muted);margin-top:9px;letter-spacing:1px}
+    .risk-banner{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;border-radius:12px;border:1px solid rgba(64,230,160,.22);background:rgba(64,230,160,.06);margin-bottom:15px}.risk-banner .label{font-size:11px;color:var(--muted)}.risk-banner b{display:block;margin-top:4px;font-size:15px}.risk-badge{font-size:12px;border-radius:999px;padding:7px 10px;background:rgba(64,230,160,.14);color:var(--green);border:1px solid rgba(64,230,160,.25)}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:13px;border-radius:12px;border:1px solid var(--line);background:rgba(5,20,35,.48)}.metric span{display:block;color:var(--muted);font-size:10px}.metric b{display:block;margin-top:6px;font-size:18px}.metric b small{font-size:10px;color:var(--muted);font-weight:400}
+    .breakdown{margin-top:18px}.breakdown-title{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:13px}.bar-item{margin-bottom:12px}.bar-copy{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}.bar-copy span:last-child{color:#a9cfe5}.bar{height:7px;background:rgba(133,186,217,.12);border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px;transition:.45s}
+    .action-stack{display:grid;gap:9px;margin-top:19px}.btn{height:44px;border-radius:11px;border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:650;font-size:13px}.btn-primary{color:#03121d;background:linear-gradient(100deg,#58e5ff,#4d9dff);box-shadow:0 12px 28px rgba(55,174,255,.20)}.btn-secondary{color:#c7e6f7;background:rgba(9,32,52,.65);border-color:rgba(132,198,236,.18)}.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+    .rule-card{padding:18px}.rule-card h3{font-size:13px;margin:0 0 14px}.rule-line{display:grid;grid-template-columns:64px 1fr 46px;align-items:center;gap:8px;font-size:11px;padding:8px 0;border-bottom:1px solid rgba(132,198,236,.09)}.rule-line:last-child{border:0}.rule-line span{color:var(--muted)}.rule-line strong:last-child{text-align:right;color:var(--cyan)}
+    .notice{padding:15px 18px;border-radius:14px;border:1px solid rgba(255,200,87,.18);background:rgba(255,200,87,.045);color:#a7bac8;font-size:11px;line-height:1.7}.notice b{color:#e4c77b}
+    .modal{position:fixed;inset:0;background:rgba(1,8,15,.76);backdrop-filter:blur(10px);z-index:50;display:none;align-items:center;justify-content:center;padding:24px}.modal.open{display:flex}.modal-card{width:min(780px,100%);max-height:90vh;overflow:auto;border-radius:20px;background:linear-gradient(155deg,#0e2944,#081a2c);border:1px solid rgba(93,214,255,.24);box-shadow:0 35px 100px rgba(0,0,0,.55)}.modal-head{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0}.close{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:rgba(4,17,30,.5);color:#b9d6e8;font-size:20px}.report{padding:24px}.report-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px;border-radius:15px;background:linear-gradient(135deg,rgba(48,143,219,.16),rgba(32,225,190,.06));border:1px solid rgba(107,208,255,.18)}.report-score{font-size:42px;font-weight:800}.report-score small{font-size:12px;color:var(--muted)}.report-summary{text-align:right}.report-summary b{display:block;font-size:18px}.report-summary span{display:block;color:var(--muted);font-size:12px;margin-top:6px}.report-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px}.report-table td{padding:12px 10px;border-bottom:1px solid var(--line)}.report-table td:first-child{color:var(--muted);width:30%}.report-conclusion{margin-top:18px;padding:16px;border-radius:13px;background:rgba(6,20,35,.55);border:1px solid var(--line);line-height:1.7;font-size:13px}.modal-actions{display:flex;gap:10px;padding:0 24px 24px}.modal-actions .btn{flex:1}
+    .toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);padding:11px 16px;border-radius:999px;background:#dff9ff;color:#092137;font-size:12px;font-weight:650;opacity:0;pointer-events:none;transition:.25s;z-index:70}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:1100px){.layout{grid-template-columns:1fr}.sidebar{position:static;display:grid;grid-template-columns:1.25fr .75fr}.notice{grid-column:1/-1}}
+    @media(max-width:780px){.app{padding:0 15px 30px}.topbar{height:67px}.top-actions .status-pill{display:none}.hero{align-items:flex-start;flex-direction:column}.hero-kpis{justify-content:flex-start}.layout{gap:14px}.sidebar{display:flex}.form-grid{grid-template-columns:1fr}.score-row{grid-template-columns:1fr}.points{text-align:left}.panel-body{padding:17px}.panel-head{padding:17px}.segmented{grid-template-columns:1fr 1fr!important}.modal-actions{flex-direction:column}}
+
+
+    /* 1920×1080 单屏驾驶舱布局：核心主题无需页面滚动 */
+    @media (min-width:1400px) and (min-height:850px){
+      html,body{width:100%;height:100%;overflow:hidden}
+      body{min-height:0}
+      .app{
+        width:100%;max-width:none;height:100vh;margin:0;padding:0 20px 14px;
+        display:grid;grid-template-rows:54px 76px minmax(0,1fr);overflow:hidden;
+      }
+      .topbar{height:54px;position:relative;top:auto}
+      .brand{gap:10px}.brand-mark{width:34px;height:34px;border-radius:10px}.brand-mark svg{width:21px;height:21px}
+      .brand strong{font-size:14px}.brand span{font-size:9px;margin-top:2px}
+      .status-pill,.demo-pill{padding:6px 10px;font-size:10px}
+      .hero{min-height:0;padding:9px 0 8px;align-items:center;gap:16px;overflow:hidden}
+      .eyebrow{font-size:9px;letter-spacing:1.5px;margin-bottom:4px}
+      h1{font-size:27px;line-height:1.05;letter-spacing:-.5px}
+      .hero p{max-width:980px;margin:5px 0 0;font-size:11px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .hero-kpis{gap:7px;flex-wrap:nowrap}
+      .mini-kpi{min-width:86px;padding:7px 10px;border-radius:10px}.mini-kpi span{font-size:9px}.mini-kpi b{font-size:15px;margin-top:2px}
+
+      .layout{height:100%;min-height:0;grid-template-columns:minmax(0,1fr) 336px;gap:12px;align-items:stretch}
+      .main-column{
+        min-width:0;min-height:0;display:grid;gap:12px;
+        grid-template-columns:minmax(350px,.92fr) minmax(390px,1fr) minmax(430px,1.12fr);
+        grid-template-rows:minmax(0,1fr) 184px;
+      }
+      .main-column>.panel{min-width:0;min-height:0}
+      .main-column>.panel:nth-child(1){grid-column:1;grid-row:1/3}
+      .main-column>.panel:nth-child(2){grid-column:2;grid-row:1}
+      .main-column>.panel:nth-child(3){grid-column:3;grid-row:1}
+      .main-column>.panel:nth-child(4){grid-column:2;grid-row:2}
+      .main-column>.panel:nth-child(5){grid-column:3;grid-row:2}
+
+      .panel{border-radius:14px;box-shadow:0 16px 42px rgba(0,0,0,.24)}
+      .panel-head{min-height:48px;padding:9px 12px;gap:8px}
+      .panel-title{gap:8px;min-width:0}.section-index{width:25px;height:25px;border-radius:7px;font-size:10px;flex:none}
+      .panel-title h2{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .panel-title small{font-size:9px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .score-chip{padding:5px 8px;font-size:10px;white-space:nowrap}
+      .panel-body{padding:10px 12px}
+
+      .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 9px}
+      .field{gap:5px}.field label{font-size:10px}.field label em{font-size:9px}
+      input[type=text],input[type=number],input[type=date],select{height:34px;border-radius:8px;padding:0 9px;font-size:10px}
+      .segmented{gap:5px}.segmented label{min-height:34px;padding:5px 6px;border-radius:8px;font-size:9px;line-height:1.2}
+      .switch-row{padding:8px 9px;border-radius:9px}.switch-copy b{font-size:10px}.switch-copy small{font-size:9px;margin-top:2px;line-height:1.35}
+      .switch{width:42px;height:23px}.slider::before{width:16px;height:16px}.switch input:checked+.slider::before{transform:translateX(18px)}
+
+      .score-list{gap:0}
+      .score-row{
+        grid-template-columns:minmax(0,1fr) 56px;
+        grid-template-areas:"name points" "control control";
+        gap:5px 8px;padding:9px 0;
+      }
+      .score-name{grid-area:name;min-width:0}.control-line{grid-area:control}.points{grid-area:points;text-align:right}
+      .score-name b{font-size:11px}.score-name small{display:none}
+      .points b{font-size:15px}.points span{font-size:9px}
+      .control-line{gap:8px}.control-line input[type=range]{min-width:0;height:16px}
+      .value-bubble{min-width:62px;height:29px;border-radius:8px;font-size:10px}
+      .score-foot{margin-top:4px;padding-top:8px}.score-foot span{font-size:10px}.score-foot strong{font-size:19px}.score-foot strong em{font-size:9px}
+      .decision-check{padding:9px;border-radius:10px}
+
+      /* 基本信息卡片在高屏下增加少量呼吸空间 */
+      .main-column>.panel:nth-child(1) .panel-body{padding:14px 13px}
+      .main-column>.panel:nth-child(1) .form-grid{gap:12px 9px}
+      .main-column>.panel:nth-child(1) input[type=text],
+      .main-column>.panel:nth-child(1) input[type=number],
+      .main-column>.panel:nth-child(1) input[type=date]{height:36px;font-size:11px}
+      .main-column>.panel:nth-child(1) .field label{font-size:10px}
+
+      /* 底部两个紧凑模块 */
+      .main-column>.panel:nth-child(4) .panel-head,
+      .main-column>.panel:nth-child(5) .panel-head{min-height:45px;padding:7px 11px}
+      .main-column>.panel:nth-child(4) .panel-body,
+      .main-column>.panel:nth-child(5) .panel-body{padding:8px 11px}
+      .main-column>.panel:nth-child(4) .score-row{padding:5px 0;gap:3px 8px}
+      .main-column>.panel:nth-child(4) .score-foot{padding-top:5px;margin-top:1px}
+      .main-column>.panel:nth-child(5) .switch-copy small{max-width:410px}
+
+      .sidebar{position:static;top:auto;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:9px}
+      .result-panel{min-height:0;padding:13px 14px}
+      .result-top h3{font-size:13px}.live{font-size:9px}
+      .gauge-wrap{margin:9px 0 8px}.gauge{width:132px;height:132px}.gauge::before{width:104px;height:104px}
+      .gauge-score{font-size:34px}.gauge-score small{font-size:11px}.gauge-content span{font-size:9px;margin-top:5px}
+      .risk-banner{padding:8px 10px;border-radius:9px;margin-bottom:8px}.risk-banner .label{font-size:9px}.risk-banner b{font-size:12px;margin-top:2px}.risk-badge{font-size:9px;padding:5px 7px}
+      .result-grid{gap:7px}.metric{padding:8px 9px;border-radius:9px}.metric span{font-size:9px}.metric b{font-size:15px;margin-top:3px}.metric b small{font-size:9px}
+      .breakdown{margin-top:10px}.breakdown-title{font-size:9px;margin-bottom:8px}.bar-item{margin-bottom:8px}.bar-copy{font-size:9px;margin-bottom:4px}.bar{height:5px}
+      .action-stack{grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.btn{height:35px;border-radius:9px;font-size:10px}
+      .rule-card{padding:10px 12px}.rule-card h3{font-size:11px;margin:0 0 6px}.rule-line{grid-template-columns:58px 1fr 35px;font-size:9px;padding:4px 0}
+      .notice{padding:8px 10px;border-radius:10px;font-size:8.5px;line-height:1.45}
+    }
+
+
+
+    /* 明亮金融科技主题 + 更紧凑的单屏布局 */
+    :root{
+      --bg:#0a3154;
+      --bg2:#0d4774;
+      --panel:rgba(16,62,102,.88);
+      --panel2:rgba(24,82,130,.76);
+      --line:rgba(140,220,255,.30);
+      --line-strong:rgba(104,226,255,.56);
+      --text:#f7fcff;
+      --muted:#b9d6e9;
+      --cyan:#63e7ff;
+      --blue:#70a8ff;
+      --green:#5af0b3;
+      --yellow:#ffd66d;
+      --red:#ff8191;
+      --shadow:0 12px 36px rgba(0,28,61,.26);
+      --radius:14px;
+    }
+    body{
+      background:
+        radial-gradient(circle at 82% -10%,rgba(81,173,255,.46),transparent 34%),
+        radial-gradient(circle at 10% 8%,rgba(64,224,255,.25),transparent 28%),
+        radial-gradient(circle at 62% 70%,rgba(42,127,214,.18),transparent 38%),
+        linear-gradient(145deg,#082845 0%,#0b3b63 48%,#0a2d4d 100%);
+    }
+    body::before{
+      opacity:.34;
+      background-image:linear-gradient(rgba(153,226,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(153,226,255,.08) 1px,transparent 1px);
+      background-size:30px 30px;
+    }
+    .topbar{
+      background:linear-gradient(180deg,rgba(15,66,108,.94),rgba(10,50,86,.86));
+      border-bottom-color:rgba(144,225,255,.30);
+    }
+    .brand-mark{
+      background:linear-gradient(145deg,#277db7,#185a91);
+      border-color:rgba(142,235,255,.72);
+      box-shadow:0 0 24px rgba(89,221,255,.24) inset,0 8px 22px rgba(0,36,74,.18);
+    }
+    .status-pill,.demo-pill,.mini-kpi{
+      background:rgba(22,79,124,.64);
+      border-color:rgba(145,224,255,.30);
+      color:#def5ff;
+    }
+    .panel{
+      background:linear-gradient(145deg,rgba(20,77,123,.92),rgba(13,55,94,.88));
+      border-color:rgba(145,224,255,.28);
+      box-shadow:var(--shadow);
+    }
+    .panel::after{background:linear-gradient(90deg,transparent,rgba(157,239,255,.76),transparent)}
+    .panel-head{background:linear-gradient(90deg,rgba(47,123,181,.20),rgba(19,74,119,.08))}
+    .section-index{
+      background:linear-gradient(145deg,rgba(84,196,255,.30),rgba(88,142,255,.24));
+      border-color:rgba(126,224,255,.62);
+      color:#dffaff;
+    }
+    .score-chip{
+      color:#e8fbff;
+      border-color:rgba(130,228,255,.42);
+      background:rgba(58,165,214,.20);
+    }
+    input[type=text],input[type=number],input[type=date],select,
+    .segmented label,.switch-row,.value-bubble,.metric{
+      background:rgba(12,53,88,.74);
+      border-color:rgba(153,222,255,.26);
+    }
+    input:focus,select:focus{
+      border-color:rgba(111,232,255,.80);
+      box-shadow:0 0 0 3px rgba(91,224,255,.13);
+      background:rgba(14,61,101,.92);
+    }
+    input::placeholder{color:#89aec5}
+    .segmented input:checked+label{
+      color:#fff;
+      border-color:rgba(119,235,255,.78);
+      background:linear-gradient(145deg,rgba(49,183,228,.46),rgba(75,129,232,.40));
+      box-shadow:0 0 18px rgba(90,222,255,.13) inset;
+    }
+    .slider{background:#28618d;border-color:rgba(180,232,255,.20)}
+    .slider::before{background:#bad8e8}
+    .score-row{border-bottom-color:rgba(169,226,255,.15)}
+    .value-bubble{color:#f5fdff}
+    .decision-check{
+      background:rgba(255,129,145,.10);
+      border-color:rgba(255,153,165,.34);
+    }
+    .result-panel{
+      background:linear-gradient(155deg,rgba(25,91,143,.98),rgba(14,61,103,.96));
+    }
+    .gauge{
+      filter:drop-shadow(0 0 18px rgba(102,225,255,.24));
+      background:conic-gradient(var(--gauge-color,var(--cyan)) calc(var(--score)*1%),rgba(170,224,255,.20) 0);
+    }
+    .gauge::before{
+      background:radial-gradient(circle at 38% 28%,#286eaa,#0e416f 70%);
+      border-color:rgba(175,235,255,.30);
+      box-shadow:0 0 24px rgba(0,42,85,.28) inset;
+    }
+    .risk-banner{background:rgba(90,240,179,.11);border-color:rgba(90,240,179,.34)}
+    .metric{background:rgba(11,53,89,.62)}
+    .bar{background:rgba(187,229,255,.18)}
+    .btn-secondary{color:#e5f8ff;background:rgba(17,69,109,.80);border-color:rgba(151,226,255,.30)}
+    .rule-card{background:linear-gradient(145deg,rgba(19,72,115,.94),rgba(12,52,90,.88))}
+    .notice{background:rgba(255,214,109,.10);border-color:rgba(255,218,124,.28);color:#d0e1eb}
+    .notice b{color:#ffe49c}
+    .modal-card{background:linear-gradient(155deg,#185b91,#0d3d69);border-color:rgba(141,232,255,.42)}
+    .report-conclusion,.close{background:rgba(10,48,81,.72)}
+
+    @media (min-width:1400px) and (min-height:850px){
+      .app{padding:0 14px 9px;grid-template-rows:48px 60px minmax(0,1fr)}
+      .topbar{height:48px}
+      .brand{gap:8px}.brand-mark{width:31px;height:31px;border-radius:9px}.brand-mark svg{width:19px;height:19px}
+      .brand strong{font-size:13px}.brand span{font-size:8px;letter-spacing:1.1px}
+      .top-actions{gap:7px}.status-pill,.demo-pill{padding:5px 8px;font-size:9px}
+      .hero{padding:6px 0 5px;gap:12px}
+      .eyebrow{font-size:8px;margin-bottom:3px}
+      h1{font-size:24px}
+      .hero p{margin-top:3px;font-size:10px;max-width:1080px}
+      .hero-kpis{gap:5px}.mini-kpi{min-width:76px;padding:5px 8px;border-radius:8px}.mini-kpi span{font-size:8px}.mini-kpi b{font-size:13px;margin-top:1px}
+
+      .layout{grid-template-columns:minmax(0,1fr) 322px;gap:8px}
+      .main-column{gap:8px;grid-template-columns:minmax(340px,.90fr) minmax(390px,1fr) minmax(420px,1.12fr);grid-template-rows:minmax(0,1fr) 170px}
+      .panel{border-radius:11px}
+      .panel-head{min-height:41px;padding:6px 9px;gap:6px}
+      .panel-title{gap:6px}.section-index{width:22px;height:22px;border-radius:6px;font-size:9px}
+      .panel-title h2{font-size:12.5px}.panel-title small{font-size:8px;margin-top:1px}
+      .score-chip{padding:4px 6px;font-size:9px}
+      .panel-body{padding:7px 9px}
+
+      .form-grid{gap:7px 7px}
+      .field{gap:3px}.field label{font-size:9px}.field label em{font-size:8px}
+      input[type=text],input[type=number],input[type=date],select{height:30px;border-radius:7px;padding:0 8px;font-size:9.5px}
+      .segmented{gap:4px}.segmented label{min-height:30px;padding:4px 5px;border-radius:7px;font-size:8.5px}
+      .switch-row{padding:6px 8px;border-radius:8px}.switch-copy b{font-size:9.5px}.switch-copy small{font-size:8px;margin-top:1px;line-height:1.25}
+      .switch{width:38px;height:21px}.slider::before{width:14px;height:14px}.switch input:checked+.slider::before{transform:translateX(16px)}
+
+      .score-row{gap:3px 7px;padding:6px 0}
+      .score-name b{font-size:10px}.points b{font-size:14px}.points span{font-size:8px}
+      .control-line{gap:6px}.control-line input[type=range]{height:14px}
+      .value-bubble{min-width:56px;height:26px;border-radius:7px;font-size:9px}
+      .score-foot{margin-top:2px;padding-top:6px}.score-foot span{font-size:9px}.score-foot strong{font-size:17px}.score-foot strong em{font-size:8px}
+      .decision-check{padding:7px;border-radius:8px}
+
+      .main-column>.panel:nth-child(1) .panel-body{padding:9px 10px}
+      .main-column>.panel:nth-child(1) .form-grid{gap:9px 7px}
+      .main-column>.panel:nth-child(1) input[type=text],
+      .main-column>.panel:nth-child(1) input[type=number],
+      .main-column>.panel:nth-child(1) input[type=date]{height:31px;font-size:9.5px}
+      .main-column>.panel:nth-child(1) .field label{font-size:9px}
+
+      .main-column>.panel:nth-child(4) .panel-head,
+      .main-column>.panel:nth-child(5) .panel-head{min-height:39px;padding:5px 8px}
+      .main-column>.panel:nth-child(4) .panel-body,
+      .main-column>.panel:nth-child(5) .panel-body{padding:6px 8px}
+      .main-column>.panel:nth-child(4) .score-row{padding:4px 0;gap:2px 6px}
+      .main-column>.panel:nth-child(4) .score-foot{padding-top:3px;margin-top:0}
+
+      .sidebar{gap:6px;grid-template-rows:minmax(0,1fr) auto auto}
+      .result-panel{padding:9px 11px}
+      .result-top h3{font-size:12px}.live{font-size:8px}
+      .gauge-wrap{margin:6px 0}.gauge{width:116px;height:116px}.gauge::before{width:91px;height:91px}
+      .gauge-score{font-size:30px}.gauge-score small{font-size:10px}.gauge-content span{font-size:8px;margin-top:4px}
+      .risk-banner{padding:6px 8px;border-radius:8px;margin-bottom:6px}.risk-banner .label{font-size:8px}.risk-banner b{font-size:11px;margin-top:1px}.risk-badge{font-size:8px;padding:4px 6px}
+      .result-grid{gap:5px}.metric{padding:6px 7px;border-radius:8px}.metric span{font-size:8px}.metric b{font-size:13px;margin-top:2px}.metric b small{font-size:8px}
+      .breakdown{margin-top:7px}.breakdown-title{font-size:8px;margin-bottom:5px}.bar-item{margin-bottom:5px}.bar-copy{font-size:8px;margin-bottom:3px}.bar{height:4px}
+      .action-stack{gap:5px;margin-top:7px}.btn{height:31px;border-radius:8px;font-size:9px}
+      .rule-card{padding:7px 9px}.rule-card h3{font-size:10px;margin:0 0 4px}.rule-line{grid-template-columns:54px 1fr 32px;font-size:8px;padding:3px 0;gap:5px}
+      .notice{padding:6px 8px;border-radius:8px;font-size:7.6px;line-height:1.35}
+    }
+
+    @media print{body{background:white;color:#111}.app,.modal-head,.modal-actions,.toast{display:none!important}.modal{position:static;display:block!important;background:white;padding:0}.modal-card{box-shadow:none;border:0;background:white;max-height:none;color:#111}.report{padding:20px}.report-table td{border-color:#ddd}.report-conclusion,.report-hero{background:#f7f9fb;border-color:#ddd}.report-summary span,.report-table td:first-child{color:#666}}
+  
+
+    /* =========================================================
+       白色底色 · 蓝色金融科技驾驶舱（最终覆盖主题）
+       适配 1920×1080：核心内容单屏展示
+       ========================================================= */
+    :root{
+      --bg:#f5f9ff;
+      --bg2:#eef5ff;
+      --panel:#ffffff;
+      --panel2:#f7fbff;
+      --line:#d8e7f7;
+      --line-strong:#8ec5ff;
+      --text:#102a43;
+      --muted:#66829d;
+      --cyan:#00a8e8;
+      --blue:#1769e0;
+      --green:#0fae78;
+      --yellow:#d99a12;
+      --red:#e54b5f;
+      --shadow:0 8px 26px rgba(25,86,154,.10);
+      --radius:13px;
+    }
+    html{background:#f5f9ff}
+    body{
+      color:var(--text);
+      background:
+        radial-gradient(circle at 88% -10%,rgba(58,149,255,.14),transparent 30%),
+        radial-gradient(circle at 2% 8%,rgba(0,188,235,.08),transparent 24%),
+        linear-gradient(180deg,#ffffff 0,#f6faff 34%,#f2f7fd 100%);
+    }
+    body::before{
+      opacity:.62;
+      background-image:
+        linear-gradient(rgba(39,116,199,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(39,116,199,.035) 1px,transparent 1px);
+      background-size:28px 28px;
+      mask-image:linear-gradient(to bottom,black,transparent 92%);
+    }
+    .topbar{
+      background:rgba(255,255,255,.94);
+      border-bottom:1px solid #d6e7f8;
+      box-shadow:0 4px 20px rgba(43,100,166,.06);
+      backdrop-filter:blur(18px);
+    }
+    .brand-mark{
+      background:linear-gradient(145deg,#1976e9,#00a7e8);
+      border-color:rgba(255,255,255,.8);
+      box-shadow:0 8px 20px rgba(23,105,224,.22),0 0 0 1px rgba(23,105,224,.10);
+    }
+    .brand strong{color:#123b66}
+    .brand span{color:#7891a8}
+    .status-pill,.demo-pill{
+      background:#f7fbff;
+      border-color:#d3e5f7;
+      color:#496b8d;
+    }
+    .demo-pill{color:#1769e0;background:#eef6ff;border-color:#bedbfa}
+    .status-dot{background:#0fae78;box-shadow:0 0 9px rgba(15,174,120,.45)}
+    .eyebrow{color:#087fc5}
+    h1{color:#123b66}
+    .hero p{color:#6c849c}
+    .mini-kpi{
+      background:linear-gradient(180deg,#ffffff,#f4f9ff);
+      border-color:#d6e6f6;
+      box-shadow:0 5px 18px rgba(32,93,156,.07);
+    }
+    .mini-kpi span{color:#7b91a6}
+    .mini-kpi b{color:#145da8}
+    .panel{
+      background:#ffffff;
+      border:1px solid #d8e7f7;
+      box-shadow:var(--shadow);
+    }
+    .panel::after{
+      height:2px;
+      background:linear-gradient(90deg,#1769e0 0%,#24b9e8 56%,transparent 100%);
+      opacity:.82;
+    }
+    .panel-head{
+      background:linear-gradient(90deg,#f3f8ff 0%,#fbfdff 72%,#ffffff 100%);
+      border-bottom-color:#dce9f6;
+    }
+    .section-index{
+      color:#1769e0;
+      background:#eaf4ff;
+      border-color:#b9dafb;
+    }
+    .panel-title h2{color:#153e67}
+    .panel-title small{color:#7a91a7}
+    .score-chip{
+      color:#1769e0;
+      background:#eaf4ff;
+      border-color:#bedcfa;
+      font-weight:700;
+    }
+    .field label{color:#486781}
+    .field label em{color:#8ba0b3}
+    input[type=text],input[type=number],input[type=date],select{
+      color:#153955;
+      background:#fbfdff;
+      border-color:#cfdfef;
+      box-shadow:inset 0 1px 2px rgba(41,91,142,.03);
+    }
+    input::placeholder{color:#9db0c1}
+    input:focus,select:focus{
+      background:#ffffff;
+      border-color:#4d9eea;
+      box-shadow:0 0 0 3px rgba(23,105,224,.10);
+    }
+    .segmented label{
+      color:#58748f;
+      background:#f8fbff;
+      border-color:#d5e4f3;
+    }
+    .segmented label:hover{border-color:#95c5f2;background:#f0f7ff}
+    .segmented input:checked+label{
+      color:#ffffff;
+      border-color:#1769e0;
+      background:linear-gradient(135deg,#1769e0,#159ddd);
+      box-shadow:0 5px 14px rgba(23,105,224,.18);
+    }
+    .switch-row{
+      color:#234968;
+      background:#f8fbff;
+      border-color:#d8e6f4;
+    }
+    .switch-copy small{color:#8297aa}
+    .slider{background:#c8d7e6;border-color:#b9cad9}
+    .slider::before{background:#ffffff;box-shadow:0 2px 6px rgba(45,80,116,.22)}
+    .switch input:checked+.slider{background:#0fae78;border-color:#0fae78}
+    .switch input:checked+.slider::before{background:#fff;box-shadow:0 2px 7px rgba(0,85,57,.25)}
+    .score-row{border-bottom-color:#e2ecf6}
+    .score-name b{color:#274a68}
+    .score-name small{color:#8297aa}
+    .points b{color:#1769e0}
+    .points span{color:#8ea2b5}
+    input[type=range]{
+      -webkit-appearance:none;appearance:none;height:4px;border-radius:999px;
+      background:#d7e5f2;outline:none;accent-color:#1769e0;
+    }
+    input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:999px;background:#d7e5f2}
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;appearance:none;width:14px;height:14px;margin-top:-5px;border-radius:50%;
+      background:linear-gradient(145deg,#1769e0,#18a7df);border:2px solid #ffffff;
+      box-shadow:0 2px 8px rgba(23,105,224,.28);
+    }
+    input[type=range]::-moz-range-track{height:4px;border-radius:999px;background:#d7e5f2}
+    input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#1769e0;border:2px solid #fff}
+    .value-bubble{
+      color:#1769e0;
+      background:#edf6ff;
+      border-color:#c6def6;
+      font-weight:700;
+    }
+    .score-foot{border-top-color:#dce8f3}
+    .score-foot span{color:#6f879d}
+    .score-foot strong{color:#123f6f}
+    .score-foot strong em{color:#7890a6}
+    .decision-check{
+      background:#fff8f9;
+      border-color:#f3cfd5;
+    }
+    .danger-text{color:#d94155!important}
+    .result-panel{
+      background:linear-gradient(165deg,#ffffff 0%,#f5faff 70%,#edf6ff 100%);
+      border-color:#c5ddf5;
+      box-shadow:0 12px 34px rgba(23,105,224,.13);
+    }
+    .result-panel::before{
+      content:"";
+      position:absolute;right:-54px;top:-64px;width:180px;height:180px;border-radius:50%;
+      border:24px solid rgba(23,105,224,.035);pointer-events:none;
+    }
+    .result-top h3{color:#123e6b}
+    .live{color:#0b9d6c}.live i{background:#0fae78;box-shadow:0 0 8px rgba(15,174,120,.48)}
+    .gauge{
+      background:conic-gradient(var(--gauge-color,var(--cyan)) calc(var(--score)*1%),#e5eef7 0);
+      filter:drop-shadow(0 8px 14px rgba(23,105,224,.12));
+    }
+    .gauge::before{
+      background:radial-gradient(circle at 42% 32%,#ffffff,#f4f9ff 70%);
+      border-color:#d5e5f4;
+      box-shadow:0 4px 18px rgba(33,92,150,.08) inset;
+    }
+    .gauge-score{color:#123f6f}
+    .gauge-score small,.gauge-content span{color:#7890a6}
+    .risk-banner{
+      background:#effbf7;
+      border-color:#bce8d8;
+    }
+    .risk-banner .label{color:#7890a6}
+    .risk-banner b{color:#17486a}
+    .risk-badge{background:#dcf6ec;border-color:#abe3cf;color:#0a9b69}
+    .metric{
+      background:#ffffff;
+      border-color:#d4e4f3;
+      box-shadow:0 4px 12px rgba(33,92,150,.04);
+    }
+    .metric span{color:#7c91a5}
+    .metric b{color:#154e83}
+    .metric b small{color:#8499ac}
+    .breakdown-title{color:#718aa1}
+    .bar-copy{color:#42627e}
+    .bar-copy span:last-child{color:#6f8da8}
+    .bar{background:#e2edf7}
+    .bar i{background:linear-gradient(90deg,#1769e0,#21b9e8)}
+    .btn-primary{
+      color:#ffffff;
+      background:linear-gradient(100deg,#1769e0,#18a2dc);
+      box-shadow:0 9px 22px rgba(23,105,224,.20);
+    }
+    .btn-secondary{
+      color:#245b8b;
+      background:#ffffff;
+      border-color:#bdd7ef;
+    }
+    .btn-secondary:hover{background:#eef6ff}
+    .rule-card{
+      background:#ffffff;
+      border-color:#d3e4f4;
+    }
+    .rule-card h3{color:#143f68}
+    .rule-line{border-bottom-color:#e2ecf5;color:#30546f}
+    .rule-line span{color:#7b91a6}
+    .rule-line strong:last-child{color:#1769e0}
+    .notice{
+      color:#6e8191;
+      background:#fffaf0;
+      border-color:#f0dfb7;
+    }
+    .notice b{color:#9c6c08}
+    .modal{background:rgba(22,51,80,.38)}
+    .modal-card{
+      color:#173a58;
+      background:#ffffff;
+      border-color:#c8dff4;
+      box-shadow:0 28px 80px rgba(29,66,103,.28);
+    }
+    .modal-head{background:#f5f9ff;border-bottom-color:#dbe7f3}
+    .modal-head h3{color:#123f6b}
+    .close{color:#315f86;background:#fff;border-color:#c8dbed}
+    .report-hero{background:linear-gradient(135deg,#edf6ff,#f7fcff);border-color:#c8dff4}
+    .report-score,.report-summary b{color:#134d7d}
+    .report-table td{border-bottom-color:#dfe9f2}
+    .report-table td:first-child{color:#72899e}
+    .report-conclusion{color:#34536e;background:#f7faff;border-color:#d7e5f2}
+    .toast{background:#123f6f;color:#ffffff;box-shadow:0 10px 30px rgba(18,63,111,.22)}
+
+    @media (min-width:1400px) and (min-height:850px){
+      .app{background:transparent}
+      .topbar{margin:0 -20px;padding:0 20px}
+      .hero{border-bottom:1px solid rgba(196,218,239,.72)}
+      .layout{padding-top:10px}
+      .panel{box-shadow:0 7px 22px rgba(26,82,142,.08)}
+      .main-column>.panel:nth-child(1){box-shadow:0 9px 26px rgba(20,91,159,.10)}
+      .panel-head{min-height:46px}
+      .result-panel{box-shadow:0 12px 32px rgba(23,105,224,.14)}
+      .notice{box-shadow:0 4px 14px rgba(139,95,8,.04)}
+    }
+
+
+    /* =========================================================
+       1600×900 紧凑驾驶舱：右侧实时评估整栏铺满
+       ========================================================= */
+    .rules-left{display:none}
+    @media (min-width:1300px) and (min-height:780px){
+      html,body{width:100%;height:100%;overflow:hidden}
+      body{min-height:0}
+      .app{
+        width:100%;max-width:none;height:100vh;margin:0;padding:0 12px 8px;
+        display:grid;grid-template-rows:44px 50px minmax(0,1fr);overflow:hidden;
+      }
+      .topbar{height:44px;position:relative;top:auto;margin:0 -12px;padding:0 14px}
+      .brand{gap:7px}.brand-mark{width:29px;height:29px;border-radius:8px}.brand-mark svg{width:18px;height:18px}
+      .brand strong{font-size:12px}.brand span{font-size:7px;margin-top:1px;letter-spacing:.9px}
+      .top-actions{gap:6px}.status-pill,.demo-pill{padding:4px 7px;font-size:8px}
+
+      .hero{height:50px;min-height:0;padding:4px 0;align-items:center;gap:10px;border-bottom:1px solid rgba(196,218,239,.72)}
+      .eyebrow{font-size:7px;letter-spacing:1.1px;margin-bottom:2px}
+      h1{font-size:21px;line-height:1.02;letter-spacing:-.3px}
+      .hero p{max-width:960px;margin:2px 0 0;font-size:8.5px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .hero-kpis{gap:4px;flex-wrap:nowrap}
+      .mini-kpi{min-width:68px;padding:4px 7px;border-radius:7px}.mini-kpi span{font-size:7px}.mini-kpi b{font-size:12px;margin-top:1px}
+
+      .layout{
+        height:100%;min-height:0;padding-top:7px;
+        grid-template-columns:minmax(0,1fr) 352px;gap:8px;align-items:stretch;
+      }
+      .main-column{
+        min-width:0;min-height:0;display:grid;gap:7px;
+        grid-template-columns:minmax(270px,.86fr) minmax(300px,.94fr) minmax(330px,1.08fr);
+        grid-template-rows:minmax(0,1fr) 128px 112px;
+      }
+      .main-column>.panel{min-width:0;min-height:0}
+      .main-column>.panel:nth-child(1){grid-column:1;grid-row:1/3}
+      .main-column>.panel:nth-child(2){grid-column:2;grid-row:1}
+      .main-column>.panel:nth-child(3){grid-column:3;grid-row:1/3}
+      .main-column>.panel:nth-child(4){grid-column:2;grid-row:2}
+      .main-column>.panel:nth-child(5){grid-column:3;grid-row:3}
+      .main-column>.rules-left{display:flex;grid-column:1/3;grid-row:3;flex-direction:column}
+
+      .panel{border-radius:10px;box-shadow:0 5px 16px rgba(26,82,142,.07)}
+      .panel-head{min-height:37px;padding:5px 8px;gap:5px}
+      .panel-title{gap:5px;min-width:0}.section-index{width:20px;height:20px;border-radius:6px;font-size:8px;flex:none}
+      .panel-title h2{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .panel-title small{font-size:7px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .score-chip{padding:3px 6px;font-size:8px;white-space:nowrap}
+      .panel-body{padding:6px 8px}
+
+      .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+      .field{gap:2px}.field label{font-size:8px}.field label em{font-size:7px}
+      input[type=text],input[type=number],input[type=date],select{height:27px;border-radius:6px;padding:0 7px;font-size:8.5px}
+      .segmented{gap:3px}.segmented label{min-height:27px;padding:3px 4px;border-radius:6px;font-size:7.5px;line-height:1.12}
+      .switch-row{padding:5px 7px;border-radius:7px}.switch-copy b{font-size:8.5px}.switch-copy small{font-size:7px;margin-top:1px;line-height:1.18}
+      .switch{width:35px;height:19px}.slider::before{width:12px;height:12px;top:2px}.switch input:checked+.slider::before{transform:translateX(15px)}
+
+      .score-list{gap:0}
+      .score-row{
+        grid-template-columns:minmax(0,1fr) 48px;
+        grid-template-areas:"name points" "control control";
+        gap:2px 6px;padding:5px 0;
+      }
+      .score-name{grid-area:name;min-width:0}.control-line{grid-area:control}.points{grid-area:points;text-align:right}
+      .score-name b{font-size:9px}.score-name small{display:none}
+      .points b{font-size:12.5px}.points span{font-size:7px}
+      .control-line{gap:5px}.control-line input[type=range]{min-width:0;height:12px}
+      .value-bubble{min-width:50px;height:23px;border-radius:6px;font-size:8px}
+      .score-foot{margin-top:1px;padding-top:4px}.score-foot span{font-size:8px}.score-foot strong{font-size:15px}.score-foot strong em{font-size:7px}
+      .decision-check{padding:6px;border-radius:7px}
+
+      .main-column>.panel:nth-child(1) .panel-body{padding:7px 8px}
+      .main-column>.panel:nth-child(1) .form-grid{gap:7px 6px}
+      .main-column>.panel:nth-child(1) input[type=text],
+      .main-column>.panel:nth-child(1) input[type=number],
+      .main-column>.panel:nth-child(1) input[type=date]{height:29px;font-size:8.5px}
+      .main-column>.panel:nth-child(4) .panel-head,
+      .main-column>.panel:nth-child(5) .panel-head{min-height:34px;padding:4px 7px}
+      .main-column>.panel:nth-child(4) .panel-body,
+      .main-column>.panel:nth-child(5) .panel-body{padding:5px 7px}
+      .main-column>.panel:nth-child(4) .score-row{padding:3px 0;gap:1px 5px}
+      .main-column>.panel:nth-child(4) .score-foot{padding-top:2px;margin-top:0}
+      .main-column>.panel:nth-child(5) .switch-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px}
+
+      .rules-left{padding:7px 9px;overflow:hidden}
+      .rule-compact-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+      .rule-compact-head h3{margin:0;color:#143f68;font-size:10px}
+      .rule-compact-head span{display:block;color:#7890a6;font-size:7px;margin-top:1px}
+      .rule-tag{margin:0!important;padding:3px 6px;border-radius:999px;color:#1769e0!important;background:#eaf4ff;border:1px solid #bedcfa;font-weight:700;white-space:nowrap}
+      .rule-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+      .rule-item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:5px;padding:5px 6px;border-radius:6px;background:#f6faff;border:1px solid #dbe8f4;font-size:7.5px}
+      .rule-item strong{color:#174a76}.rule-item span{color:#748ca2}.rule-item b{color:#1769e0;font-size:9px}
+      .rule-note{margin-top:5px;padding-top:4px;border-top:1px dashed #dce8f3;color:#7a8fa3;font-size:6.7px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .rule-note b{color:#9c6c08}
+
+      .sidebar{position:static;top:auto;min-height:0;height:100%;display:block}
+      .sidebar>.result-panel{height:100%;min-height:0;padding:12px 13px;display:flex;flex-direction:column}
+      .result-top{flex:none}.result-top h3{font-size:13px}.live{font-size:8px}
+      .gauge-wrap{flex:none;margin:13px 0 10px}.gauge{width:154px;height:154px}.gauge::before{width:121px;height:121px}
+      .gauge-score{font-size:39px}.gauge-score small{font-size:12px}.gauge-content span{font-size:8px;margin-top:5px}
+      .risk-banner{flex:none;padding:8px 10px;border-radius:8px;margin-bottom:8px}.risk-banner .label{font-size:8px}.risk-banner b{font-size:12px;margin-top:2px}.risk-badge{font-size:8px;padding:4px 6px}
+      .result-grid{flex:none;gap:6px}.metric{padding:8px;border-radius:8px}.metric span{font-size:8px}.metric b{font-size:15px;margin-top:2px}.metric b small{font-size:8px}
+      .breakdown{flex:1;min-height:0;margin-top:12px;display:flex;flex-direction:column;justify-content:center}
+      .breakdown-title{font-size:8px;margin-bottom:10px}.bar-item{margin-bottom:13px}.bar-copy{font-size:8.5px;margin-bottom:5px}.bar{height:6px}
+      .action-stack{flex:none;grid-template-columns:1fr;gap:6px;margin-top:auto}.btn{height:34px;border-radius:8px;font-size:9px}
+      .result-panel::before{width:220px;height:220px;right:-70px;top:-70px}
+    }
+
+    @media (min-width:1500px) and (max-height:930px){
+      .layout{grid-template-columns:minmax(0,1fr) 360px}
+    }
+
+
+    /* 右侧下半区：评估报告解释说明实时直显 */
+    .live-report-card{
+      margin-top:12px;padding:12px 13px;border:1px solid #d4e4f3;border-radius:11px;
+      background:linear-gradient(145deg,#f7fbff,#ffffff);box-shadow:0 5px 16px rgba(33,92,150,.05);
+      display:flex;flex-direction:column;min-height:0;
+    }
+    .live-report-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .live-report-head h4{margin:0;color:#17466f;font-size:12px;display:flex;align-items:center;gap:7px}
+    .live-report-head h4::before{content:"";width:4px;height:13px;border-radius:999px;background:linear-gradient(180deg,#1769e0,#20b9e8)}
+    .live-report-tag{padding:3px 7px;border-radius:999px;color:#1670c7;background:#eaf4ff;border:1px solid #c5def6;font-size:7.5px;font-weight:700;white-space:nowrap}
+    .live-report-conclusion{color:#284d6c;font-size:9.5px;line-height:1.55;padding:8px 9px;border-radius:8px;background:#eef7ff;border:1px solid #d6e9fa}
+    .live-report-list{display:grid;gap:6px;margin-top:7px}
+    .live-report-item{display:grid;grid-template-columns:55px minmax(0,1fr);gap:7px;align-items:start;padding-top:6px;border-top:1px dashed #dbe7f2}
+    .live-report-item:first-child{border-top:0;padding-top:0}
+    .live-report-item span{color:#7890a5;font-size:8px;white-space:nowrap}
+    .live-report-item b{color:#315975;font-size:8.5px;line-height:1.45;font-weight:600}
+    .live-report-item.attention b{color:#9a6500}
+    .live-report-item.veto b{color:#d94b5d}
+
+    @media (min-width:1300px) and (min-height:780px){
+      .sidebar>.result-panel{padding:10px 11px}
+      .gauge-wrap{margin:9px 0 7px}.gauge{width:142px;height:142px}.gauge::before{width:112px;height:112px}
+      .gauge-score{font-size:36px}
+      .risk-banner{margin-bottom:6px;padding:7px 9px}
+      .result-grid{gap:5px}.metric{padding:6px 7px}
+      .breakdown{flex:none;margin-top:8px;justify-content:flex-start}
+      .breakdown-title{margin-bottom:6px}.bar-item{margin-bottom:7px}.bar-copy{margin-bottom:3px}.bar{height:5px}
+      .live-report-card{flex:1;margin-top:4px;padding:8px 9px;border-radius:8px;overflow:hidden}
+      .live-report-head{margin-bottom:5px}.live-report-head h4{font-size:9.5px}.live-report-head h4::before{height:11px;width:3px}.live-report-tag{font-size:6.5px;padding:2px 5px}
+      .live-report-conclusion{font-size:7.8px;line-height:1.4;padding:6px 7px;border-radius:6px}
+      .live-report-list{gap:3px;margin-top:4px}
+      .live-report-item{grid-template-columns:47px minmax(0,1fr);gap:5px;padding-top:4px}
+      .live-report-item span{font-size:6.8px}.live-report-item b{font-size:7.2px;line-height:1.32}
+      .action-stack{margin-top:6px}
+    }
+
+
+
+/* =========================================================
+   手机端问卷式三步流程：两屏输入 → 一屏结果（仅移动端）
+   电脑端保持原版布局与交互不变
+   ========================================================= */
+@media (max-width: 780px){
+  html,body{height:100%;overflow:hidden!important;background:#06101d!important}
+  body::before{opacity:.22!important;background-size:22px 22px!important}
+  .app{height:100vh!important;padding:0!important;display:block!important;overflow:hidden!important;max-width:none!important}
+  .topbar,.hero,.layout{display:none!important}
+
+  .mobile-wizard{display:flex!important;flex-direction:column;height:100vh;overflow:hidden;background:radial-gradient(circle at 85% -5%, rgba(42,142,255,.30), transparent 30%),radial-gradient(circle at 10% 10%, rgba(28,224,255,.14), transparent 28%),linear-gradient(180deg,#05101d 0%, #07182c 100%);color:#eef8ff}
+  .mw-header{flex:none;padding:14px 16px 10px;border-bottom:1px solid rgba(114,186,255,.14);background:linear-gradient(180deg,rgba(6,17,31,.96),rgba(6,17,31,.72));backdrop-filter:blur(14px)}
+  .mw-header-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .mw-back,.mw-menu{width:28px;height:28px;border-radius:8px;border:1px solid rgba(130,202,255,.14);display:grid;place-items:center;color:#dff5ff;background:rgba(255,255,255,.02);font-size:18px}
+  .mw-title{font-weight:700;font-size:18px;letter-spacing:.2px}
+  .mw-sub{font-size:11px;color:#8fb0c8;margin-top:2px}
+  .mw-progress{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;align-items:start}
+  .mw-step{position:relative;text-align:center}
+  .mw-step::after{content:"";position:absolute;top:11px;left:calc(50% + 18px);width:calc(100% - 36px);height:2px;background:rgba(114,161,204,.35)}
+  .mw-step:last-child::after{display:none}
+  .mw-dot{width:24px;height:24px;margin:0 auto 6px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:rgba(96,131,165,.28);color:#d7eefe;border:1px solid rgba(170,214,255,.18)}
+  .mw-step.active .mw-dot,.mw-step.done .mw-dot{background:linear-gradient(145deg,#2b7dff,#43d8ff);border-color:transparent;color:#fff;box-shadow:0 6px 18px rgba(47,145,255,.28)}
+  .mw-step.done::after,.mw-step.active::after{background:linear-gradient(90deg,#2b7dff,#45daff)}
+  .mw-step-title{font-size:12px;color:#dff3ff;font-weight:600}
+  .mw-step-sub{margin-top:2px;font-size:10px;color:#82a3bc}
+
+  .mw-body{flex:1;position:relative;overflow:hidden}
+  .mw-screen{display:none;height:100%;overflow:auto;padding:14px 14px 18px;-webkit-overflow-scrolling:touch}
+  .mw-screen.active{display:block}
+  .mw-screen::-webkit-scrollbar{width:0;height:0}
+  .mw-intro{padding:2px 2px 10px}
+  .mw-screen-title{font-size:16px;font-weight:800;color:#f3fbff;line-height:1.35}
+  .mw-screen-desc{margin-top:4px;font-size:12px;color:#88a8bf}
+
+  .mobile-wizard .panel,.mobile-wizard .rules-left,.mobile-wizard .result-panel{display:block!important;box-shadow:none!important;border:1px solid rgba(112,184,255,.13)!important;border-radius:18px!important;background:linear-gradient(180deg,rgba(9,26,45,.94),rgba(8,22,38,.94))!important;overflow:hidden!important;margin-bottom:12px!important}
+  .mobile-wizard .panel::after,.mobile-wizard .result-panel::after{display:none!important}
+  .mobile-wizard .panel-head{min-height:auto!important;padding:14px 14px 10px!important;background:transparent!important;border-bottom:none!important;display:block!important}
+  .mobile-wizard .panel-title{display:flex!important;align-items:center!important;gap:8px!important}
+  .mobile-wizard .section-index{width:24px!important;height:24px!important;border-radius:50%!important;background:rgba(43,124,255,.18)!important;border:1px solid rgba(70,173,255,.30)!important;color:#8fd8ff!important;font-size:12px!important}
+  .mobile-wizard .panel-title h2{font-size:16px!important;color:#f5fbff!important;white-space:normal!important}
+  .mobile-wizard .panel-title small{font-size:11px!important;color:#87a5bc!important;white-space:normal!important;display:block!important;margin-top:3px!important}
+  .mobile-wizard .score-chip{display:inline-flex!important;margin-top:8px!important;padding:5px 10px!important;font-size:11px!important;background:rgba(43,124,255,.14)!important;border:1px solid rgba(83,186,255,.24)!important;color:#cdecff!important;border-radius:999px!important}
+  .mobile-wizard .panel-body{padding:0 14px 14px!important}
+
+  .mobile-wizard .form-grid{grid-template-columns:1fr!important;gap:12px!important}
+  .mobile-wizard .field{gap:6px!important}
+  .mobile-wizard .field label{font-size:13px!important;color:#d8edf9!important;font-weight:600!important}
+  .mobile-wizard .field label em{font-size:11px!important;color:#7f9db6!important}
+  .mobile-wizard input[type=text],.mobile-wizard input[type=number],.mobile-wizard input[type=date],.mobile-wizard select{height:46px!important;border-radius:12px!important;border:1px solid rgba(115,183,255,.17)!important;background:rgba(9,28,48,.96)!important;color:#edf7ff!important;padding:0 14px!important;font-size:14px!important}
+  .mobile-wizard input::placeholder{color:#7290a8!important}
+  .mobile-wizard .segmented{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .mobile-wizard .segmented label{min-height:42px!important;border-radius:12px!important;font-size:13px!important;background:rgba(9,28,48,.9)!important;color:#8cb2cb!important;border:1px solid rgba(115,183,255,.14)!important}
+  .mobile-wizard .segmented input:checked+label{background:linear-gradient(135deg,#2a7bff,#20b6f0)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 8px 18px rgba(38,134,255,.22)!important}
+  .mobile-wizard .switch-row{padding:12px 13px!important;border-radius:14px!important;background:rgba(9,28,48,.90)!important;border:1px solid rgba(115,183,255,.14)!important}
+  .mobile-wizard .switch-copy b{font-size:14px!important;color:#eef8ff!important}
+  .mobile-wizard .switch-copy small{font-size:11px!important;color:#83a3ba!important;line-height:1.45!important}
+  .mobile-wizard .switch{width:46px!important;height:26px!important}
+  .mobile-wizard .slider{background:#294763!important;border-color:rgba(255,255,255,.06)!important}
+  .mobile-wizard .slider::before{width:18px!important;height:18px!important;top:3px!important;left:3px!important;background:#dbeaf7!important}
+  .mobile-wizard .switch input:checked+.slider{background:rgba(36,197,133,.35)!important;border-color:rgba(64,230,160,.48)!important}
+  .mobile-wizard .switch input:checked+.slider::before{transform:translateX(19px)!important;background:#4ef0ab!important}
+
+  .mobile-wizard .score-list{gap:8px!important}
+  .mobile-wizard .score-row{grid-template-columns:1fr!important;gap:6px!important;padding:10px 0!important;border-bottom:1px dashed rgba(131,194,255,.12)!important}
+  .mobile-wizard .score-name b{font-size:14px!important;color:#ecf8ff!important}
+  .mobile-wizard .score-name small{display:block!important;font-size:11px!important;color:#80a0b7!important;margin-top:4px!important}
+  .mobile-wizard .points{text-align:left!important;display:flex!important;align-items:baseline!important;gap:6px!important}
+  .mobile-wizard .points b{font-size:18px!important;color:#60dcff!important}
+  .mobile-wizard .points span{font-size:11px!important;color:#83a7bf!important}
+  .mobile-wizard .control-line{gap:8px!important}
+  .mobile-wizard .control-line input[type=range]{height:18px!important}
+  .mobile-wizard input[type=range]{background:#224361!important}
+  .mobile-wizard input[type=range]::-webkit-slider-runnable-track{height:4px;background:#224361}
+  .mobile-wizard input[type=range]::-webkit-slider-thumb{width:18px;height:18px;margin-top:-7px;background:linear-gradient(145deg,#2a80ff,#40ddff);border:2px solid #fff;box-shadow:0 4px 10px rgba(40,132,255,.28)}
+  .mobile-wizard .value-bubble{min-width:66px!important;height:32px!important;border-radius:10px!important;background:rgba(10,31,53,.96)!important;border:1px solid rgba(115,183,255,.15)!important;color:#eef8ff!important;font-size:12px!important}
+  .mobile-wizard .score-foot{margin-top:10px!important;padding-top:10px!important;border-top:1px solid rgba(115,183,255,.12)!important}
+  .mobile-wizard .score-foot span{color:#88a8c1!important;font-size:11px!important}
+  .mobile-wizard .score-foot strong{font-size:22px!important;color:#fff!important}
+  .mobile-wizard .score-foot strong em{font-size:11px!important;color:#88a8c1!important}
+  .mobile-wizard .decision-check{background:rgba(255,85,105,.08)!important;border:1px solid rgba(255,124,140,.18)!important;border-radius:12px!important;padding:10px!important}
+  .mobile-wizard .danger-text{color:#ff8d9a!important}
+
+  .mobile-wizard .rules-left .panel-head,.mobile-wizard .rule-card{display:block!important}
+  .mobile-wizard .rule-card{padding:14px!important;background:transparent!important;border:none!important}
+  .mobile-wizard .rule-card h3{font-size:15px!important;color:#f5fbff!important;margin:0 0 10px!important}
+  .mobile-wizard .rule-line{grid-template-columns:60px 1fr 40px!important;gap:8px!important;padding:8px 0!important;font-size:12px!important;color:#d2e8f8!important;border-bottom:1px solid rgba(129,191,255,.10)!important}
+  .mobile-wizard .rule-line span{color:#83a7bf!important}.mobile-wizard .rule-line strong:last-child{color:#60dcff!important}
+  .mobile-wizard .notice{margin-top:10px!important;padding:11px 12px!important;border-radius:12px!important;background:rgba(255,200,87,.08)!important;border:1px solid rgba(255,200,87,.16)!important;color:#b6cddd!important;font-size:11px!important;line-height:1.55!important}
+  .mobile-wizard .notice b{color:#ffd36d!important}
+
+  .mobile-wizard .result-panel{padding:14px!important;position:relative!important}
+  .mobile-wizard .result-top h3{font-size:20px!important;color:#f6fbff!important}
+  .mobile-wizard .live{font-size:11px!important;color:#41e8a6!important}
+  .mobile-wizard .gauge-wrap{margin:10px 0 14px!important}
+  .mobile-wizard .gauge{width:200px!important;height:200px!important;--gauge-color:#37e4d5!important;background:conic-gradient(var(--gauge-color) calc(var(--score)*1%), rgba(66,116,149,.24) 0)!important;filter:drop-shadow(0 10px 22px rgba(34,233,215,.18))!important}
+  .mobile-wizard .gauge::before{width:160px!important;height:160px!important;background:radial-gradient(circle at 36% 26%,#0d3251,#071a2d 70%)!important;border-color:rgba(120,220,255,.14)!important}
+  .mobile-wizard .gauge-score{font-size:52px!important;color:#ffffff!important}
+  .mobile-wizard .gauge-score small{font-size:20px!important;color:#9fbdd0!important}
+  .mobile-wizard .gauge-content span{font-size:13px!important;color:#8cadc5!important}
+  .mobile-wizard .risk-banner{padding:12px 14px!important;border-radius:14px!important;background:rgba(36,214,153,.08)!important;border:1px solid rgba(64,230,160,.18)!important;margin-bottom:12px!important}
+  .mobile-wizard .risk-banner .label{font-size:12px!important;color:#82a4bb!important}
+  .mobile-wizard .risk-banner b{font-size:20px!important;color:#f3fbff!important;margin-top:4px!important}
+  .mobile-wizard .risk-badge{padding:8px 10px!important;font-size:12px!important;background:rgba(34,214,145,.18)!important;color:#53efb1!important;border:1px solid rgba(74,228,165,.22)!important}
+  .mobile-wizard .result-grid{grid-template-columns:1fr!important;gap:10px!important}
+  .mobile-wizard .metric{padding:14px!important;background:rgba(10,31,53,.96)!important;border:1px solid rgba(118,188,255,.15)!important;border-radius:14px!important}
+  .mobile-wizard .metric span{font-size:12px!important;color:#8baac0!important}
+  .mobile-wizard .metric b{font-size:24px!important;color:#fff!important}
+  .mobile-wizard .metric:last-child b{font-size:44px!important;color:#59dcff!important;letter-spacing:-1px!important}
+  .mobile-wizard .metric b small{font-size:16px!important;color:#9ab7ca!important}
+  .mobile-wizard .breakdown{margin-top:14px!important}
+  .mobile-wizard .breakdown-title{font-size:13px!important;color:#d5ecfb!important;margin-bottom:10px!important}
+  .mobile-wizard .bar-item{margin-bottom:10px!important}
+  .mobile-wizard .bar-copy{font-size:12px!important;color:#d9eefb!important;margin-bottom:5px!important}
+  .mobile-wizard .bar-copy span:last-child{color:#9ab7ca!important}
+  .mobile-wizard .bar{height:6px!important;background:rgba(136,187,219,.16)!important}.mobile-wizard .bar i{background:linear-gradient(90deg,#2f86ff,#37e4d5)!important}
+  .mobile-wizard .live-report-card{display:block!important;margin-top:14px!important;padding:14px!important;background:rgba(9,28,48,.90)!important;border-radius:16px!important;border:1px solid rgba(115,183,255,.15)!important}
+  .mobile-wizard .live-report-head{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-bottom:10px!important}
+  .mobile-wizard .live-report-head h4{font-size:16px!important;color:#f1fbff!important;margin:0!important}
+  .mobile-wizard .live-report-tag{font-size:11px!important;padding:4px 8px!important;background:rgba(43,124,255,.16)!important;border:1px solid rgba(88,185,255,.22)!important;color:#c8ecff!important;border-radius:999px!important}
+  .mobile-wizard .live-report-conclusion{font-size:13px!important;line-height:1.65!important;color:#d9eefb!important;background:rgba(10,31,53,.95)!important;border-radius:12px!important;padding:12px!important}
+  .mobile-wizard .live-report-list{margin-top:10px!important;gap:8px!important}
+  .mobile-wizard .live-report-item{grid-template-columns:62px 1fr!important;gap:8px!important;padding-top:8px!important}
+  .mobile-wizard .live-report-item span{font-size:11px!important;color:#6de6ff!important}
+  .mobile-wizard .live-report-item b{font-size:12px!important;line-height:1.55!important;color:#d6ecfb!important}
+  .mobile-wizard .action-stack{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:14px!important}
+  .mobile-wizard .btn{height:46px!important;border-radius:12px!important;font-size:14px!important;font-weight:700!important}
+  .mobile-wizard .btn-primary{background:linear-gradient(90deg,#2a7cff,#39c9ff)!important;color:#fff!important;box-shadow:0 10px 22px rgba(37,130,255,.22)!important}
+  .mobile-wizard .btn-secondary{background:transparent!important;color:#d5ecfb!important;border:1px solid rgba(126,195,255,.22)!important}
+
+  .mw-footer{position:sticky;bottom:0;z-index:8;flex:none;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(6,17,31,0),rgba(6,17,31,.86) 24%,rgba(6,17,31,.96) 100%)}
+  .mw-nav{display:flex;gap:10px}
+  .mw-btn{flex:1;height:46px;border-radius:12px;border:1px solid rgba(126,195,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
+  .mw-btn.secondary{background:transparent;color:#d5ecfb}
+  .mw-btn.primary{background:linear-gradient(90deg,#2a7cff,#39c9ff);color:#fff;border:none;box-shadow:0 10px 24px rgba(40,128,255,.22)}
+  .mw-page-indicator{text-align:center;margin-top:8px;font-size:11px;color:#7f9eb7}
+}
+
+</style>
+
+<style id="hotel-dataset-linkage-style">
+.hotel-search-field{position:relative;z-index:25}
+.hotel-suggestions{display:none;position:absolute;left:0;right:0;top:calc(100% + 5px);max-height:300px;overflow:auto;background:#fff;border:1px solid #cfe1f3;border-radius:11px;box-shadow:0 16px 38px rgba(26,77,130,.18);z-index:999;padding:5px}
+.hotel-suggestions.show{display:block}
+.hotel-suggestion{padding:9px 10px;border-radius:8px;cursor:pointer;border-bottom:1px solid #edf3f8}
+.hotel-suggestion:last-child{border-bottom:0}
+.hotel-suggestion:hover,.hotel-suggestion.active{background:#edf6ff}
+.hotel-suggestion-name{font-size:11px;font-weight:700;color:#164a78;line-height:1.35}
+.hotel-suggestion-meta{font-size:9px;color:#7890a5;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hotel-search-empty{padding:13px 10px;color:#8198aa;font-size:10px;text-align:center}
+@media(max-width:780px){
+  .mobile-wizard .hotel-search-field{z-index:100}
+  .mobile-wizard .hotel-suggestions{position:absolute;top:calc(100% + 5px);max-height:46vh;background:#0b2239;border-color:rgba(104,186,255,.22);box-shadow:0 18px 45px rgba(0,0,0,.45)}
+  .mobile-wizard .hotel-suggestion{padding:11px 10px;border-bottom-color:rgba(117,184,239,.10)}
+  .mobile-wizard .hotel-suggestion:hover,.mobile-wizard .hotel-suggestion.active{background:rgba(43,124,255,.16)}
+  .mobile-wizard .hotel-suggestion-name{font-size:13px;color:#edf8ff}
+  .mobile-wizard .hotel-suggestion-meta{font-size:10px;color:#82a5bf}
+  .mobile-wizard .hotel-search-empty{color:#789bb5}
+}
+</style>
+
 </head>
-
 <body>
-    <div class="container" id="cv">
-        <div class="side">
-            <div class="me">
-                <div class="portrait"></div>
-                <div class="remodal remodal-img" data-remodal-id="portrait-modal">
-                    <h3>请输入图片URL地址：</h3>
-                    <br/>
-                    <input type="text" id="avatar-url">
-                    <button data-remodal-action="confirm" class="remodal-confirm">确定</button>
-                </div>
-                <h1 id="username" >attackatdawn</h1>
-                <h4 id="persona-tag" >Python / Web / 互联网教育</h4>
-            </div>
-            <div class="profile info-unit">
-                <h2 class="info-header"><i class="iconfont icon-person"></i> <span class="info-title">基本信息</span></h2>
-                <hr>
-                <ul class="info-list">
-                    <li>
-                        <label class="left-label">姓名</label><span class="label-value">饶熠舟</span></li>
-                    <li>
-                        <label class="left-label">学历</label><span class="label-value">硕士</span></li>
-                    <li>
-                        <label class="left-label">毕业院校</label><span class="label-value">华南理工大学</span></li>
-                    <li>
-                        <label class="left-label">毕业年份</label><span class="label-value">2017</span></li>
-                </ul>
-            </div>
-            <div class="contact info-unit">
-                <h2 class="info-header"><i class="iconfont icon-call"></i> <span class="info-title">联系方式</span></h2>
-                <hr>
-                <ul class="info-list">
-                    <li>
-                        <label class="left-label">手机</label><span class="label-value">13826425391</span></li>
-                    <li>
-                        <label class="left-label">邮箱</label><span class="label-value">attackatdawn@qq.com</span></li>
-                    <li>
-                        <label class="left-label">个人主页</label><span class="label-value">attackatdawn.github.io</span></li>
-                    <li>
-                        <label class="left-label">Github</label><span class="label-value">github.com/attackatdawn</span></li>
-                </ul>
-            </div>
-            <div class="skill info-unit">
-                <h2 class="info-header"><i class="iconfont icon-star"></i> <span class="info-title">技能点</span></h2>
-                <hr>
-                <ul class="progress-list">
-                    <li>
-                        <label class="left-label">Matlab/openCV</label>
-                        <progress value="80" max="100"></progress>
-                    </li>
-                    <li>
-                        <label class="left-label">模式识别</label>
-                        <progress value="70" max="100"></progress>
-                    </li>
-                    <li>
-                        <label class="left-label">图像处理</label>
-                        <progress value="80" max="100"></progress>
-                    </li>
-                    <li>
-                        <label class="left-label">深度学习</label>
-                        <progress value="70" max="100"></progress>
-                    </li>
-                </ul>
-            </div>
-            <div class="stack info-unit">
-                <h2 class="info-header"><i class="iconfont icon-build"></i> <span class="info-title">技术栈</span></h2>
-                <hr>
-                <ul class="stack-list">
-                    <li>
-                        <label class="left-label">熟练</label><span class="label-value">Python,Matlab,opencv,caffe,tensorflow</span></li>
-                    </li>
-                    <li>
-                        <label class="left-label">掌握</label><span class="label-value">C++,Windows Server 2008</span></li>
-                    </li>
-                    <li>
-                        <label class="left-label">其它</label><span class="label-value">我全都是瞎写的。</span></li>
-                    </li>
-                </ul>
-            </div>
 
-            <div class="code info-unit">
-                <h2 class="info-header"><i class="iconfont icon-weixin"></i> <span class="info-title">个人微信</span></h2>
-                <hr>
-                <div class="weixin">
-                    <img src="static/image/wechat.jpg" alt="">
+<!--
+数据口径：
+- 酒店预填：新63家酒店运营数据(预核额)0806.xlsx
+- 评分规则：预授信评分卡(1).xlsx
+- 运营评分项严格使用“房间数”，不使用 RevPar。
+- 手机端申请额度默认及酒店联动后保持为空；最终建议授信额度仍独立按 min(OTA年收入 × 40% × 综合得分对应评级系数, 1000万元) 实时计算。
+-->
 
-                </div>
-            </div>
-            <div class="remodal remodal-img" data-remodal-id="weixin-modal">
-                <h3>请输入图片URL地址：</h3>
-                <br/>
-                <input type="text" id="weixin-url">
-                <button data-remodal-action="confirm" class="remodal-confirm">确定</button>
-            </div>
-        </div>
-        <div class="main">
-            <div class="education info-unit right-list">
-                <h2 class="info-header"><i class="iconfont icon-education"></i> <span class="info-title">教育经历</span></h2>
-                <hr>
-                <ul class="experience-list">
-                    <li>
-                        <h3>华南理工大学 - 模式识别与智能系统（硕士）2015-2018</h3>
-                        <p>
-                            主修课程：模式识别 图像处理
-                        </p>
-                    </li>
-					
-                </ul>
-            </div>
-            <div class="work info-unit right-list">
-                <h2 class="info-header"><i class="iconfont icon-work"></i> <span class="info-title">工作经历</span></h2>
-                <hr>
-                <ul class="experience-list">
-                    <li>
-                        <h3>华南理工大学研究生会新媒体部干事、副部长</h3>
-                        <p>负责校研会新媒体部日常工作，主要负责运营“华南理工大学研究生”微信公众号，协助举办2017年华南理工大学研究生“复试风云会”（师兄师姐复试经验分享）活动的虎牙直播平台的现场视频直播。
-                        </p>
-                    </li>
-
-                </ul class="experience-list">
-            </div>
-            <div class="project info-unit right-list">
-                <h2 class="info-header"><i class="iconfont icon-project"></i> <span class="info-title">个人项目</span></h2>
-                <hr>
-                <ul class="experience-list">
-                    <li>
-                        <h3> 基于稀疏表示强化学习的高光谱图像数据分类</h3>
-                        <p>
-                            基于稀疏表示方法进行多维数据分类，通过强化学习分类器融合方法提高稀疏表示分类效果。(会议论文：Random subspace based sparse representation for hyperspectral image classification. IGARSS 2016)
-                            <br/>
-                        </p>
-                    </li>
-                    <li>
-                        <h3>高光谱图像融合方法研究</h3>
-                        <p>
-                            将低空间分辨率、高频谱分辨率的多光谱图像和高空间分辨率、低频谱分辨率的全色图像融合成具有高空间分辨率、高频谱分辨率的融合图像。主要采用小波分解或卷积神经网络的策略，RSIP 2017
-                        </p>
-                    </li>
-                    
-                </ul>
-            </div>
-            <div class="trophy info-unit">
-                <h2 class="info-header"><i class="iconfont icon-trophy"></i> <span class="info-title">奖项与证书</span></h2>
-                <hr>
-                <ul class="experience-list">
-                    <li>
-                        <h3>小学生作文二等奖</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam。
-                        </p>
-                    </li> 
-                    <li>
-                        <h3>曾获统一冰红茶“再来一瓶”奖</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam。
-                        </p>
-                    </li> 
-                    <li>
-                        <h3>这一行也是为了凑版面</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam。
-                        </p>
-                    </li>                     
-            </div>
-            <div class="aboutme info-unit right-paragraph">
-                <h2 class="info-header"><i class="iconfont icon-flower"></i> <span class="info-title">自我评价</span></h2>
-                <hr>
-                <p>
-                    其实我隐藏得很深
-                </p>
-            </div>
-        </div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 17.5V8.4L12 4l8 4.4v9.1" stroke="#5BE1FF" stroke-width="1.6"/><path d="M7.5 18v-6h3v6m3 0V9.5h3V18M3 20h18" stroke="#8FB8FF" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <div><strong>SmartCredit OS</strong><span>RETAIL CREDIT DECISION ENGINE</span></div>
     </div>
-</body>
+    <div class="top-actions"><div class="status-pill"><i class="status-dot"></i>规则引擎在线</div><div class="demo-pill">交互演示版</div></div>
+  </header>
 
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Harbin Branch · Culture & Tourism Loan</div>
+      <h1>“文旅乐”预授信智能评分台</h1>
+      <p>将 Excel 评分卡转化为可交互的数字化评估流程：录入经营信息，系统实时计算主体、运营及财务得分，并同步输出风险评级、授信系数与建议额度。</p>
+    </div>
+    <div class="hero-kpis"><div class="mini-kpi"><span>评分维度</span><b>3</b></div><div class="mini-kpi"><span>核心指标</span><b>8</b></div><div class="mini-kpi"><span>最高分</span><b>100</b></div></div>
+  </section>
+
+  <div class="layout">
+    <main class="main-column">
+      <section class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="section-index">01</span><div><h2>借款人及经营实体基本信息</h2><small>建立客户与酒店经营主体画像</small></div></div><span class="score-chip">基础档案</span></div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="field hotel-search-field"><label>酒店名称</label><input id="hotelName" type="text" autocomplete="off" value="" placeholder="输入酒店名称 / 编号 / 品牌模糊搜索"><div class="hotel-suggestions" id="hotelSuggestions"></div></div>
+            <div class="field"><label>酒店地址</label><input id="hotelAddress" type="text" value="哈尔滨市松北区太阳岛商圈" placeholder="请输入酒店地址"></div>
+            <div class="field"><label>品牌</label><input id="entityName" type="text" value="" placeholder="酒店品牌（可编辑）"></div>
+            <div class="field mobile-hide-hotel-id"><label>酒店编号</label><input id="licenseNo" type="text" value="" placeholder="酒店编号（可编辑）"></div>
+            <div class="field"><label>成立日期</label><input id="establishedDate" type="date" value="2019-06-18"></div>
+            <div class="field"><label>申请额度 <em>单位：万元</em></label><input id="preCredit" type="number" min="0" step="0.1" value="300"></div>
+            <div class="field"><label>联系方式</label><input id="contactInfo" type="text" value="" placeholder="请输入手机号码或其他联系方式"></div>
+            <div class="field full"><label>酒店类型</label><div class="segmented" style="--cols:4">
+              <input type="radio" name="hotelType" id="typeHigh" value="高端"><label for="typeHigh">高端酒店</label>
+              <input type="radio" name="hotelType" id="typeMid" value="中端" checked><label for="typeMid">中端酒店</label>
+              <input type="radio" name="hotelType" id="typeEconomy" value="经济型"><label for="typeEconomy">经济型</label>
+              <input type="radio" name="hotelType" id="typeSingle" value="单体"><label for="typeSingle">单体酒店</label>
+            </div></div>
+            <div class="field full"><div class="switch-row"><div class="switch-copy"><b>连锁品牌经营</b><small class="mobile-hide-chain-desc">品牌信息自动联动；酒店定位评分按中高端 10 分、经济型 5 分</small></div><label class="switch"><input id="isChain" type="checkbox" checked><span class="slider"></span></label></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="section-index">02</span><div><h2>主体状况</h2><small>经营稳定性、区域热度与酒店定位</small></div></div><span class="score-chip"><b id="basicChip">30</b> / 30</span></div>
+        <div class="panel-body">
+          <div class="score-list">
+            <div class="score-row"><div class="score-name"><b>酒店经营年限</b><small>≥5年 10分；3–5年 8分；不足3年 5分</small></div><div class="control-line"><input id="years" type="range" min="0" max="20" step="1" value="6"><span class="value-bubble"><b id="yearsValue">6</b>&nbsp;年</span></div><div class="points"><b id="yearsPoints">10</b><span> / 10</span></div></div>
+            <div class="score-row"><div class="score-name"><b>区域旅游热度</b><small>核心景区/商圈 10分；一般区域 5分；偏远区域 0分</small></div><div class="segmented" style="--cols:3"><input type="radio" name="heat" id="heatCore" value="core" checked><label for="heatCore">核心景区/商圈</label><input type="radio" name="heat" id="heatNormal" value="normal"><label for="heatNormal">一般区域</label><input type="radio" name="heat" id="heatRemote" value="remote"><label for="heatRemote">偏远区域</label></div><div class="points"><b id="heatPoints">10</b><span> / 10</span></div></div>
+            <div class="score-row"><div class="score-name"><b>酒店定位</b><small>中高端或连锁 10分；经济型或单体 5分</small></div><div class="value-bubble" id="positionText" style="min-width:100%;justify-content:flex-start;padding:0 13px">中端 · 连锁</div><div class="points"><b id="positionPoints">10</b><span> / 10</span></div></div>
+          </div>
+          <div class="score-foot"><span>主体状况小计</span><strong><span id="basicTotal">30</span><em> / 30</em></strong></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="section-index">03</span><div><h2>经营运营能力</h2><small>入住表现、平台口碑、价格与规模</small></div></div><span class="score-chip"><b id="operationChip">42</b> / 50</span></div>
+        <div class="panel-body">
+          <div class="score-list">
+            <div class="score-row"><div class="score-name"><b>近12月平均入住率</b><small>≥75% 20分；65%–75% 15分；45%–55% 10分；＜45% 0分</small></div><div class="control-line"><input id="occupancy" type="range" min="0" max="100" step="0.1" value="82.8"><span class="value-bubble"><b id="occupancyValue">78</b>%</span></div><div class="points"><b id="occupancyPoints">20</b><span> / 20</span></div></div>
+            <div class="score-row"><div class="score-name"><b>平台综合评分</b><small>≥4.8分 10分；≥4.6分 8分；≥4.3分 5分</small></div><div class="control-line"><input id="platformRating" type="range" min="3" max="5" step="0.1" value="4.7"><span class="value-bubble"><b id="ratingValue">4.7</b>&nbsp;分</span></div><div class="points"><b id="ratingPoints">8</b><span> / 10</span></div></div>
+            <div class="score-row"><div class="score-name"><b>房间均价</b><small>≥400元 10分；≥300元 7分；≥200元 5分；＜200元 2分</small></div><div class="control-line"><input id="roomPrice" type="range" min="80" max="1000" step="1" value="573"><span class="value-bubble">¥&nbsp;<b id="priceValue">380</b></span></div><div class="points"><b id="pricePoints">7</b><span> / 10</span></div></div>
+            <div class="score-row"><div class="score-name"><b>房间数</b><small>≥100间 10分；≥80间 7分；≥60间 5分；＜60间 2分</small></div><div class="control-line"><input id="roomCount" type="range" min="0" max="250" step="1" value="134"><span class="value-bubble"><b id="roomValue">134</b>&nbsp;间</span></div><div class="points"><b id="roomPoints">10</b><span> / 10</span></div></div>
+          </div>
+          <div class="score-foot"><span>经营运营能力小计</span><strong><span id="operationTotal">42</span><em> / 50</em></strong></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="section-index">04</span><div><h2>财务偿债能力</h2><small>基于 OTA 年收入评估现金流承载能力</small></div></div><span class="score-chip"><b id="financeChip">15</b> / 20</span></div>
+        <div class="panel-body">
+          <div class="score-list"><div class="score-row"><div class="score-name"><b>OTA 年收入</b><small>≥1500万元 20分；≥1200万元 15分；≥1000万元 10分；＜1000万元 5分</small></div><div class="control-line"><input id="otaRevenue" type="range" min="0" max="3000" step="1" value="2318"><span class="value-bubble"><b id="otaValue">1300</b>&nbsp;万</span></div><div class="points"><b id="otaPoints">15</b><span> / 20</span></div></div></div>
+          <div class="score-foot"><span>财务偿债能力小计</span><strong><span id="financeTotal">15</span><em> / 20</em></strong></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="section-index">05</span><div><h2>负面信息与否决项</h2><small>黑名单、诉讼及其他重大法律纠纷</small></div></div><span class="score-chip danger-text">一票否决</span></div>
+        <div class="panel-body"><div class="decision-check"><div class="switch-row" style="border:0;background:transparent;padding:0"><div class="switch-copy"><b>存在黑名单、诉讼法律纠纷等负面信息</b><small>开启后，无论评分结果如何，授信建议均自动调整为“否决”</small></div><label class="switch"><input id="negativeInfo" type="checkbox"><span class="slider"></span></label></div></div></div>
+      </section>
+
+      <section class="panel rule-card rules-left">
+        <div class="rule-compact-head"><div><h3>授信系数规则</h3><span>评分等级与建议授信系数映射</span></div><span class="rule-tag">自动匹配</span></div>
+        <div class="rule-grid">
+          <div class="rule-item"><strong>85–100</strong><span>A · 优质</span><b>1.0</b></div>
+          <div class="rule-item"><strong>70–84</strong><span>B · 良好</span><b>0.9</b></div>
+          <div class="rule-item"><strong>60–69</strong><span>C · 关注</span><b>0.8</b></div>
+          <div class="rule-item"><strong>＜60</strong><span>D · 谨慎</span><b>0</b></div>
+        </div>
+        <div class="rule-note"><b>演示说明：</b>原表入住率 55%–65% 区间未单独定义，本 Demo 按 10 分档衔接；风险等级与授信建议为演示映射，正式结果以银行制度、系统规则及审批意见为准。</div>
+      </section>
+    </main>
+
+    <aside class="sidebar">
+      <section class="panel result-panel">
+        <div class="result-top"><h3>实时评估结果</h3><span class="live"><i></i>LIVE</span></div>
+        <div class="gauge-wrap"><div class="gauge" id="gauge"><div class="gauge-content"><div class="gauge-score"><span id="totalScore">100</span><small>分</small></div><span>综合得分</span></div></div></div>
+        <div class="risk-banner" id="riskBanner"><div><span class="label">风险评级</span><b id="riskLabel">A · 优质</b></div><span class="risk-badge" id="riskBadge">建议准入</span></div>
+        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b></div></div>
+        <div class="breakdown"><div class="breakdown-title"><span>评分结构</span><span>自动更新</span></div>
+          <div class="bar-item"><div class="bar-copy"><span>主体状况</span><span id="barBasicText">30 / 30</span></div><div class="bar"><i id="barBasic" style="width:100%"></i></div></div>
+          <div class="bar-item"><div class="bar-copy"><span>经营运营能力</span><span id="barOperationText">42 / 50</span></div><div class="bar"><i id="barOperation" style="width:84%"></i></div></div>
+          <div class="bar-item"><div class="bar-copy"><span>财务偿债能力</span><span id="barFinanceText">15 / 20</span></div><div class="bar"><i id="barFinance" style="width:75%"></i></div></div>
+        </div>
+        <section class="live-report-card" id="liveReportCard" aria-live="polite">
+          <div class="live-report-head"><h4>评估解释说明</h4><span class="live-report-tag">实时生成</span></div>
+          <div class="live-report-conclusion" id="liveReportConclusion">客户主体经营稳定，区域与酒店定位较优，经营能力和收入表现良好。综合评分达到优质档，建议按申请额度推进授信。</div>
+          <div class="live-report-list">
+            <div class="live-report-item"><span>评分依据</span><b id="liveReportBasis">主体状况 30/30；经营运营 42/50；财务偿债 15/20。</b></div>
+            <div class="live-report-item attention" id="liveReportFocusRow"><span>重点关注</span><b id="liveReportFocus">财务偿债能力为相对弱项，建议重点核验 OTA 收入及经营流水稳定性。</b></div>
+            <div class="live-report-item"><span>审批建议</span><b id="liveReportAction">建议按申请额度授信，建议授信额度 300.0 万元。</b></div>
+          </div>
+        </section>
+        <div class="action-stack"><button class="btn btn-primary" id="generateBtn">查看完整评估报告</button><button class="btn btn-secondary" id="resetBtn">恢复酒店数据</button></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+
+
+  <!-- 手机端问卷式三步流程，仅在移动端显示 -->
+  <div class="mobile-wizard" id="mobileWizard" style="display:none">
+    <div class="mw-header">
+      <div class="mw-header-top">
+        <div class="mw-back" id="mwTopBack">‹</div>
+        <div style="flex:1;text-align:center">
+          <div class="mw-title">文旅乐贷 · 预授信系统</div>
+          
+        </div>
+        <div class="mw-menu">⋯</div>
+      </div>
+      <div class="mw-progress">
+        <div class="mw-step active" data-step="1"><div class="mw-dot">1</div><div class="mw-step-title">基本信息</div><div class="mw-step-sub">问卷输入</div></div>
+        <div class="mw-step" data-step="2"><div class="mw-dot">2</div><div class="mw-step-title">经营信息</div><div class="mw-step-sub">评分填写</div></div>
+        <div class="mw-step" data-step="3"><div class="mw-dot">3</div><div class="mw-step-title">实时评估</div><div class="mw-step-sub">核心结果</div></div>
+      </div>
+    </div>
+    <div class="mw-body">
+      <section class="mw-screen active" id="mwScreen1">
+        <div class="mw-intro"><div class="mw-screen-title">基本信息</div></div>
+      </section>
+      <section class="mw-screen" id="mwScreen2">
+        <div class="mw-intro"><div class="mw-screen-title">经营信息</div><div class="mw-screen-desc">继续填写经营状况、运营能力、财务能力及否决项（2/2）</div></div>
+      </section>
+      <section class="mw-screen" id="mwScreen3">
+        <div class="mw-intro"><div class="mw-screen-title">预授信评分结果</div><div class="mw-screen-desc">提交后即刻生成评分、建议额度与解释说明（3/3）</div></div>
+      </section>
+    </div>
+    <div class="mw-footer">
+      <div class="mw-nav">
+        <button class="mw-btn secondary" id="mwPrevBtn">上一步</button>
+        <button class="mw-btn primary" id="mwNextBtn">下一步</button>
+      </div>
+      <div class="mw-page-indicator"><span id="mwIndicator">第 1 / 3 屏</span></div>
+    </div>
+  </div>
+
+<div class="modal" id="reportModal" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-head"><h3>预授信智能评估报告</h3><button class="close" id="closeModal" aria-label="关闭">×</button></div>
+    <div class="report">
+      <div class="report-hero"><div><div class="report-score"><span id="reportScore">87</span><small> / 100</small></div><div style="color:var(--muted);font-size:11px;margin-top:5px">综合评分</div></div><div class="report-summary"><b id="reportRisk">A · 优质</b><span id="reportSuggestion">建议按申请额度授信</span></div></div>
+      <table class="report-table"><tbody>
+        <tr><td>酒店 / 品牌</td><td id="reportEntity">松北江畔精品酒店 / 哈尔滨江畔文旅酒店管理有限公司</td></tr>
+        <tr><td>经营地址</td><td id="reportAddress">哈尔滨市松北区太阳岛商圈</td></tr>
+        <tr><td>主体状况</td><td id="reportBasic">30 / 30 分</td></tr>
+        <tr><td>经营运营能力</td><td id="reportOperation">42 / 50 分</td></tr>
+        <tr><td>财务偿债能力</td><td id="reportFinance">15 / 20 分</td></tr>
+        <tr><td>授信系数</td><td id="reportCoefficient">1.0</td></tr>
+        <tr><td>建议授信额度</td><td id="reportCredit">300.0 万元</td></tr>
+        <tr><td>否决项</td><td id="reportVeto">未触发</td></tr>
+      </tbody></table>
+      <div class="report-conclusion" id="reportConclusion">客户主体经营稳定，区域与酒店定位较优，经营能力和收入表现良好。综合评分达到优质档，建议在核实基础资料及负面信息后，按申请额度推进授信。</div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" id="copyBtn">复制评估结论</button><button class="btn btn-primary" onclick="window.print()">打印 / 保存 PDF</button></div>
+  </div>
+</div>
+<div class="toast" id="toast">评估结论已复制</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const state={};
+const HOTEL_DATA=[{"name":"和颐至尚-哈尔滨火车站医大一院博物馆地铁站店","hotelId":"45148","openDate":"2019-06-14","rooms":134.0,"occupancy":0.828,"years":6,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":573.0,"otaRevenue":2318.334,"applicationAmount":927.3336,"district":"南岗区","brand":"和颐至尚","address":"黑龙江哈尔滨南岗区果戈里大街348-1号"},{"name":"如家精选-哈尔滨西站万达广场店","hotelId":"J45115","openDate":"2024-07-19","rooms":87.0,"occupancy":1.034,"years":1,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":426.0,"otaRevenue":1400.3955,"applicationAmount":560.1582,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区中兴大道哈西万达公寓SOHOB座15层"},{"name":"艾扉 哈尔滨中央大街火车站医大一院地铁站店","hotelId":"AF0343","openDate":"2025-08-11","rooms":37.0,"occupancy":0.973,"years":1,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":414.0,"otaRevenue":544.2515,"applicationAmount":217.7006,"district":"南岗区","brand":"艾扉","address":"黑龙江哈尔滨南岗区吉林街5号"},{"name":"如家精选-哈尔滨火车站果戈里工人文化宫地铁站店","hotelId":"J45114","openDate":"2024-05-18","rooms":96.0,"occupancy":0.854,"years":2,"heat":"一般","position":"中高端","rating":4.7,"roomPrice":452.0,"otaRevenue":1352.544,"applicationAmount":541.0176,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区中山路238号"},{"name":"如家精选-哈尔滨西站黑龙江大学地铁站店","hotelId":"J45121","openDate":"2025-04-19","rooms":69.0,"occupancy":1.014,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":378.0,"otaRevenue":967.104,"applicationAmount":386.8416,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区学府三道街66号"},{"name":"如家商旅(金标) -哈尔滨中央大街火车站机场巴士站店","hotelId":"Z45123","openDate":"2024-11-13","rooms":113.0,"occupancy":0.832,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":460.0,"otaRevenue":1579.6835,"applicationAmount":631.8734,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区铁路街12号"},{"name":"如家·neo-哈尔滨会展中心万达广场龙塔店","hotelId":"45164","openDate":"2024-11-01","rooms":61.0,"occupancy":0.984,"years":1,"heat":"核心","position":"经济","rating":4.6,"roomPrice":363.0,"otaRevenue":794.8605,"applicationAmount":317.9442,"district":"南岗区","brand":"如家","address":"黑龙江哈尔滨南岗区鸿翔路27号"},{"name":"如家精选-哈尔滨西站万达广场学府路医大二院地铁站店","hotelId":"J45119","openDate":"2024-12-31","rooms":87.0,"occupancy":0.931,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":376.0,"otaRevenue":1111.425,"applicationAmount":444.57,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区新境街6号"},{"name":"如家·neo-哈尔滨西站朝阳市场顺乡大街店","hotelId":"45166","openDate":"2025-03-07","rooms":67.0,"occupancy":0.985,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":354.0,"otaRevenue":853.4795,"applicationAmount":341.3918,"district":"道里区","brand":"如家","address":"黑龙江哈尔滨道里区利民街67号"},{"name":"如家精选-哈尔滨火车站中央大街医大一院地铁站店","hotelId":"J45110","openDate":"2023-01-20","rooms":156.0,"occupancy":0.878,"years":3,"heat":"一般","position":"经济","rating":4.8,"roomPrice":393.0,"otaRevenue":1964.43,"applicationAmount":785.772,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区东大直街286-290号"},{"name":"如家·neo-哈尔滨火车站中央大街博物馆地铁站店","hotelId":"45111","openDate":"2008-08-11","rooms":100.0,"occupancy":1.01,"years":18,"heat":"一般","position":"经济","rating":4.9,"roomPrice":340.0,"otaRevenue":1251.95,"applicationAmount":500.78,"district":"道里区","brand":"如家","address":"黑龙江哈尔滨道里区上游街51号"},{"name":"和颐至尊-哈尔滨高铁西站万达广场店","hotelId":"45145","openDate":"2018-09-08","rooms":111.0,"occupancy":0.82,"years":7,"heat":"核心","position":"经济","rating":4.7,"roomPrice":411.0,"otaRevenue":1365.3555,"applicationAmount":546.1422,"district":"南岗区","brand":"和颐至尊","address":"黑龙江哈尔滨南岗区绥化路与中兴左街交汇处"},{"name":"如家精选-哈尔滨中央大街火车站工人文化宫地铁站店","hotelId":"J45102","openDate":"2016-07-19","rooms":87.0,"occupancy":0.862,"years":10,"heat":"核心","position":"经济","rating":4.8,"roomPrice":379.0,"otaRevenue":1038.3885,"applicationAmount":415.3554,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区中山路238号"},{"name":"如家·neo-哈尔滨会展中心医大一院烟厂地铁站店","hotelId":"45168","openDate":"2025-04-19","rooms":70.0,"occupancy":0.957,"years":1,"heat":"核心","position":"经济","rating":4.6,"roomPrice":337.0,"otaRevenue":822.71,"applicationAmount":329.084,"district":"南岗区","brand":"如家","address":"黑龙江哈尔滨南岗区大成街112号"},{"name":"如家商旅-哈尔滨哈西万达广场高铁站店","hotelId":"T45109","openDate":"2020-07-17","rooms":98.0,"occupancy":0.898,"years":6,"heat":"核心","position":"经济","rating":4.8,"roomPrice":349.0,"otaRevenue":1123.178,"applicationAmount":449.2712,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区铁景街210号"},{"name":"如家商旅(金标) -哈尔滨会展中心南直路地铁站店","hotelId":"Z45124","openDate":"2025-07-29","rooms":75.0,"occupancy":0.733,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":394.0,"otaRevenue":791.1375,"applicationAmount":316.455,"district":"香坊区","brand":"如家商旅","address":"黑龙江哈尔滨香坊区香电街41号"},{"name":"如家精选-哈尔滨龙塔红博中央公园会展中心地铁站店","hotelId":"J45122","openDate":"2025-01-20","rooms":92.0,"occupancy":0.88,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":326.0,"otaRevenue":963.746,"applicationAmount":385.4984,"district":"南岗区","brand":"如家精选","address":"黑龙江哈尔滨南岗区香山路18-1号金源花园C区1号商服"},{"name":"如家商旅(金标)-哈尔滨西站机场路群力工农大街地铁站店","hotelId":"Z45101","openDate":"2018-01-12","rooms":111.0,"occupancy":0.82,"years":8,"heat":"核心","position":"经济","rating":4.8,"roomPrice":348.0,"otaRevenue":1154.6775,"applicationAmount":461.871,"district":"道里区","brand":"如家商旅","address":"黑龙江哈尔滨道里区群力第七大道2028号"},{"name":"和颐至格 哈尔滨火车站民航大厦省政府地铁站店","hotelId":"45143","openDate":"2017-09-30","rooms":63.0,"occupancy":0.889,"years":8,"heat":"核心","position":"经济","rating":4.8,"roomPrice":315.0,"otaRevenue":643.86,"applicationAmount":257.544,"district":"道里区","brand":"和颐至格","address":"黑龙江哈尔滨道里区工农大街154号"},{"name":"如家·neo-哈尔滨火车站西人直街工人地铁站店","hotelId":"45137","openDate":"2014-12-25","rooms":98.0,"occupancy":0.939,"years":11,"heat":"核心","position":"经济","rating":4.7,"roomPrice":298.0,"otaRevenue":1001.56,"applicationAmount":400.624,"district":"南岗区","brand":"如家","address":"黑龙江哈尔滨南岗区清明七道街6号"},{"name":"如家精选-哈尔滨三大动力哈锅店","hotelId":"J45105","openDate":"2017-08-04","rooms":74.0,"occupancy":1.041,"years":9,"heat":"核心","position":"经济","rating":4.5,"roomPrice":268.0,"otaRevenue":753.579,"applicationAmount":301.4316,"district":"香坊区","brand":"如家精选","address":"黑龙江哈尔滨香坊区旭升街45号"},{"name":"艾扉 哈尔滨火车站中山路工人文化宫地铁站店","hotelId":"AF0345","openDate":"2025-04-20","rooms":58.0,"occupancy":0.672,"years":1,"heat":"核心","position":"经济","rating":4.7,"roomPrice":411.0,"otaRevenue":584.292,"applicationAmount":233.7168,"district":"南岗区","brand":"艾扉","address":"黑龙江哈尔滨南岗区革新街143号"},{"name":"如家商旅(金标)-哈尔滨火车站东人直街医大一院店","hotelId":"Z45119","openDate":"2022-05-18","rooms":53.0,"occupancy":0.66,"years":4,"heat":"核心","position":"经济","rating":4.8,"roomPrice":399.0,"otaRevenue":510.708,"applicationAmount":204.2832,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区东大直街158号"},{"name":"如家·neo-哈尔滨西站农垦总医院哈双路店","hotelId":"45162","openDate":"2024-10-28","rooms":47.0,"occupancy":1.021,"years":1,"heat":"核心","position":"经济","rating":4.8,"roomPrice":255.0,"otaRevenue":446.03,"applicationAmount":178.412,"district":"南岗区","brand":"如家","address":"黑龙江哈尔滨南岗区哈双路406号"},{"name":"如家·哈尔滨西站学府路医大二院地铁站店","hotelId":"45139","openDate":"2016-06-01","rooms":103.0,"occupancy":0.835,"years":10,"heat":"一般","position":"经济","rating":4.7,"roomPrice":296.0,"otaRevenue":928.5965,"applicationAmount":371.4386,"district":"南岗区","brand":"如家","address":"黑龙江哈尔滨南岗区新境街6号"},{"name":"如家商旅-哈尔滨西站理工大学学府路地铁站店","hotelId":"T45105","openDate":"2018-06-26","rooms":62.0,"occupancy":0.919,"years":8,"heat":"一般","position":"经济","rating":4.7,"roomPrice":268.0,"otaRevenue":556.698,"applicationAmount":222.6792,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区测绘路128号"},{"name":"如家商旅(金标)-哈尔滨西站学府路地铁站凯德广场店","hotelId":"Z45105","openDate":"2018-12-06","rooms":100.0,"occupancy":0.95,"years":7,"heat":"核心","position":"经济","rating":4.8,"roomPrice":252.0,"otaRevenue":876.0,"applicationAmount":350.4,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区学府路1号18栋1层70号"},{"name":"云上四季-哈尔滨会展中心衡山路万达广场店","hotelId":"45169","openDate":"2024-12-23","rooms":88.0,"occupancy":0.841,"years":1,"heat":"核心","position":"经济","rating":4.7,"roomPrice":284.0,"otaRevenue":764.456,"applicationAmount":305.7824,"district":"南岗区","brand":"云上四季","address":"黑龙江哈尔滨南岗区衡山路20号"},{"name":"如家·neo-哈尔滨西站金爵万象万达广场地铁站店","hotelId":"45136","openDate":"2014-12-30","rooms":87.0,"occupancy":1.034,"years":11,"heat":"核心","position":"经济","rating":4.8,"roomPrice":229.0,"otaRevenue":752.5935,"applicationAmount":301.0374,"district":"南岗区","brand":"如家","address":"黑龙江哈尔滨南岗区金爵万象三期3栋高服单元8号"},{"name":"如家·neo-哈尔滨会展中心龙塔省医院地铁站机场巴士店","hotelId":"45104","openDate":"2007-09-30","rooms":106.0,"occupancy":0.84,"years":18,"heat":"核心","position":"经济","rating":4.4,"roomPrice":278.0,"otaRevenue":905.346,"applicationAmount":362.1384,"district":"香坊区","brand":"如家","address":"黑龙江哈尔滨香坊区泰山路82-8号"},{"name":"如家商旅(金标)-哈尔滨会展中心龙塔地铁站店","hotelId":"Z45114","openDate":"2020-07-12","rooms":96.0,"occupancy":0.802,"years":6,"heat":"核心","position":"经济","rating":4.9,"roomPrice":288.0,"otaRevenue":809.424,"applicationAmount":323.7696,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区汉水路162号"},{"name":"如家商旅 哈尔滨国际会展中心工业大学 校区嵩山路店","hotelId":"T45107","openDate":"2019-05-16","rooms":92.0,"occupancy":0.88,"years":7,"heat":"核心","position":"经济","rating":4.8,"roomPrice":262.0,"otaRevenue":775.698,"applicationAmount":310.2792,"district":"道外区","brand":"如家商旅","address":"黑龙江哈尔滨道外区嵩山路135号"},{"name":"驿居酒店-哈尔滨西站黑龙江大学学府路地铁站店","hotelId":"E45110","openDate":"2018-06-27","rooms":22.0,"occupancy":1.0,"years":8,"heat":"核心","position":"经济","rating":4.7,"roomPrice":226.0,"otaRevenue":181.478,"applicationAmount":72.5912,"district":"南岗区","brand":null,"address":"黑龙江哈尔滨南岗区测绘路128号"},{"name":"如家精选 哈尔滨林业大学文昌街哈工大航天馆店","hotelId":"J45104","openDate":"2017-03-18","rooms":82.0,"occupancy":0.695,"years":8,"heat":"核心","position":"中高端","rating":4.9,"roomPrice":323.0,"otaRevenue":670.432,"applicationAmount":268.1728,"district":"香坊区","brand":"如家精选","address":"黑龙江哈尔滨香坊区文昌街299号"},{"name":"如家·neo-哈尔滨汉水路会展中心地铁站店","hotelId":"45105","openDate":"2007-11-02","rooms":93.0,"occupancy":0.839,"years":18,"heat":"核心","position":"中高端","rating":4.9,"roomPrice":265.0,"otaRevenue":756.9735,"applicationAmount":302.7894,"district":"香坊区","brand":"如家","address":"黑龙江哈尔滨香坊区泰山路82-8号"},{"name":"艾扉-哈尔滨西站哈西万达广场店","hotelId":"AF0474","openDate":"2025-12-06","rooms":75.0,"occupancy":0.773,"years":0,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":285.0,"otaRevenue":602.25,"applicationAmount":240.9,"district":"南岗区","brand":"艾扉","address":"黑龙江哈尔滨南岗区西宁南路108号中交香颂E座19层"},{"name":"和颐至尚 哈尔滨和平路中医药大学店","hotelId":"45140","openDate":"2016-10-29","rooms":112.0,"occupancy":0.866,"years":9,"heat":"一般","position":"中高端","rating":4.9,"roomPrice":254.0,"otaRevenue":899.36,"applicationAmount":359.744,"district":"香坊区","brand":"和颐至尚","address":"黑龙江哈尔滨香坊区和平路79号"},{"name":"如家商旅(金标)-哈尔滨会展中心体育学院黄河路店","hotelId":"Z45110","openDate":"2019-12-07","rooms":73.0,"occupancy":0.795,"years":6,"heat":"核心","position":"中高端","rating":4.9,"roomPrice":271.0,"otaRevenue":572.8675,"applicationAmount":229.147,"district":"南岗区","brand":"如家商旅","address":"黑龙江哈尔滨南岗区宣义街19号"},{"name":"如家·neo-哈尔滨红旗大街会展中心珠江路地铁站店","hotelId":"45155","openDate":"2022-05-26","rooms":85.0,"occupancy":0.776,"years":4,"heat":"一般","position":"中高端","rating":4.9,"roomPrice":254.0,"otaRevenue":611.1925,"applicationAmount":244.477,"district":"香坊区","brand":"如家","address":"黑龙江哈尔滨香坊区公滨路395号"},{"name":"如家·neo 哈尔滨二大动力路林业大学哈锅店","hotelId":"45123","openDate":"2013-11-08","rooms":80.0,"occupancy":0.775,"years":12,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":207.0,"otaRevenue":467.2,"applicationAmount":186.88,"district":"香坊区","brand":"如家","address":"黑龙江哈尔滨香坊区三大动力路446号"},{"name":"如家商旅(金标)-鸡西火车站中心大街大商新玛特店","hotelId":"Z46701","openDate":"2019-08-27","rooms":72.0,"occupancy":0.653,"years":7,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":221.0,"otaRevenue":378.432,"applicationAmount":151.3728,"district":"鸡冠区","brand":"如家商旅","address":"黑龙江鸡西鸡冠区中心大街224号"},{"name":"如家精选-密山火车站东安街百货大楼店","hotelId":"J46701","openDate":"2024-08-20","rooms":78.0,"occupancy":0.615,"years":2,"heat":"一般","position":"中高端","rating":4.7,"roomPrice":217.0,"otaRevenue":381.498,"applicationAmount":152.5992,"district":null,"brand":"如家精选","address":"黑龙江密山东安街175号"},{"name":"如家商旅(金标) 绵芬河马克西侧大厦店","hotelId":"Z45302","openDate":"2023-11-06","rooms":79.0,"occupancy":0.544,"years":2,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":243.0,"otaRevenue":380.622,"applicationAmount":152.2488,"district":null,"brand":"如家商旅","address":"黑龙江绥芬河青云路138号"},{"name":"如家商旅(金标) 什木斯桦南县行政中心世纪广场店","hotelId":"Z45401","openDate":"2024-02-06","rooms":80.0,"occupancy":0.838,"years":2,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":156.0,"otaRevenue":379.6,"applicationAmount":151.84,"district":null,"brand":"如家商旅","address":"黑龙江桦南新兴路149号"},{"name":"如家·neo-哈尔滨依兰县政府亿达广场通江路店","hotelId":"45152","openDate":"2021-08-13","rooms":65.0,"occupancy":0.815,"years":5,"heat":"核心","position":"中高端","rating":4.7,"roomPrice":156.0,"otaRevenue":301.3075,"applicationAmount":120.523,"district":null,"brand":"如家","address":"黑龙江依兰通江路447号"},{"name":"如家·neo-佳木斯火车站店","hotelId":"45406","openDate":"2025-06-13","rooms":56.0,"occupancy":0.75,"years":1,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":162.0,"otaRevenue":247.324,"applicationAmount":98.9296,"district":"前进区","brand":"如家","address":"黑龙江佳木斯前进区升平路302号"},{"name":"莫泰-哈尔滨会展中心珠江路地铁站店","hotelId":"M45107","openDate":"2015-12-23","rooms":110.0,"occupancy":0.455,"years":10,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":239.0,"otaRevenue":437.635,"applicationAmount":175.054,"district":"香坊区","brand":null,"address":"黑龙江哈尔滨香坊区珠江路3号"},{"name":"驿居(金牌)-哈尔滨和兴路中医药大学乐松广场店","hotelId":"E45103","openDate":"2017-03-18","rooms":33.0,"occupancy":0.394,"years":9,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":269.0,"otaRevenue":127.677,"applicationAmount":51.0708,"district":"香坊区","brand":null,"address":"黑龙江哈尔滨香坊区文昌街299号"},{"name":"如家商旅-七台河步行街客运站金融大厦店","hotelId":"T46401","openDate":"2020-11-01","rooms":80.0,"occupancy":0.563,"years":5,"heat":"核心","position":"中高端","rating":4.7,"roomPrice":188.0,"otaRevenue":309.52,"applicationAmount":123.808,"district":"桃山区","brand":"如家商旅","address":"黑龙江七台河桃山区景丰路38号"},{"name":"如家·neo 鸡西金龙大厦火车站万达广场店","hotelId":"46702","openDate":"2014-12-20","rooms":63.0,"occupancy":0.667,"years":11,"heat":"核心","position":"中高端","rating":4.7,"roomPrice":157.0,"otaRevenue":241.4475,"applicationAmount":96.579,"district":"鸡冠区","brand":"如家","address":"黑龙江鸡西鸡冠区中心大街91号金龙大厦"},{"name":"如家·neo-佳木斯火车站中山街新玛特店","hotelId":"45401","openDate":"2011-12-30","rooms":114.0,"occupancy":0.754,"years":14,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":123.0,"otaRevenue":386.973,"applicationAmount":154.7892,"district":"前进区","brand":"如家","address":"黑龙江佳木斯前进区前进区中山街与长安路交叉口157号"},{"name":"如家·neo-哈尔滨宾县龙广大厦店","hotelId":"45158","openDate":"2023-09-26","rooms":64.0,"occupancy":0.5,"years":2,"heat":"核心","position":"中高端","rating":4.9,"roomPrice":186.0,"otaRevenue":217.248,"applicationAmount":86.8992,"district":"宾县","brand":"如家","address":"黑龙江宾县迎宾路299号"},{"name":"如家 牛丹江第二人民医院恒丰纸业乾元大厦店","hotelId":"45304","openDate":"2016-10-16","rooms":77.0,"occupancy":0.857,"years":9,"heat":"核心","position":"中高端","rating":4.7,"roomPrice":104.0,"otaRevenue":252.945,"applicationAmount":101.178,"district":"阳明区","brand":"如家","address":"黑龙江牡丹江阳明区光华街77号 (金融服务中心)"},{"name":"驿居酒店-牡丹江恒丰纸业乾元大厦店","hotelId":"E45301","openDate":"2018-07-31","rooms":36.0,"occupancy":0.722,"years":7,"heat":"核心","position":"中高端","rating":4.6,"roomPrice":120.0,"otaRevenue":114.318,"applicationAmount":45.7272,"district":"阳明区","brand":null,"address":"黑龙江牡丹江阳明区光华街77号 (金融服务中心)"},{"name":"如家商旅(金标)-牡丹江高铁站大商新玛特江滨公园店","hotelId":"Z45301","openDate":"2020-12-28","rooms":68.0,"occupancy":0.559,"years":5,"heat":"核心","position":"中高端","rating":4.7,"roomPrice":144.0,"otaRevenue":201.042,"applicationAmount":80.4168,"district":"东安区","brand":"如家商旅","address":"黑龙江牡丹江东安区新安街245号"},{"name":"莫泰 哈尔滨会展中心红旗大街公滨路地铁站店","hotelId":"M45111","openDate":"2022-06-17","rooms":15.0,"occupancy":0.467,"years":4,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":168.0,"otaRevenue":43.2525,"applicationAmount":17.301,"district":"香坊区","brand":null,"address":"黑龙江哈尔滨香坊区公滨路395号"},{"name":"如家·neo-鸡西火车站妇幼儿童医院店","hotelId":"46706","openDate":"2025-11-18","rooms":70.0,"occupancy":0.386,"years":0,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":199.0,"otaRevenue":196.735,"applicationAmount":78.694,"district":"鸡冠区","brand":"如家","address":"黑龙江鸡西鸡冠区西山街道富强路5号"},{"name":"如家·neo-牡丹江高铁火车站步行街大商新玛特店","hotelId":"45305","openDate":"2019-01-03","rooms":111.0,"occupancy":0.622,"years":7,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":115.0,"otaRevenue":287.6565,"applicationAmount":115.0626,"district":"东安区","brand":"如家","address":"黑龙江牡丹江东安区光华街575号"},{"name":"驿居酒店 牛丹江步行街火车站大商新玛特店","hotelId":"E45302","openDate":"2022-06-12","rooms":55.0,"occupancy":0.618,"years":4,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":104.0,"otaRevenue":128.48,"applicationAmount":51.392,"district":"西安区","brand":null,"address":"黑龙江牡丹江西安区长安街2号"},{"name":"如家商旅-牡丹江高铁火车站步行街店","hotelId":"T45301","openDate":"2019-12-07","rooms":87.0,"occupancy":0.517,"years":6,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":120.0,"otaRevenue":196.881,"applicationAmount":78.7524,"district":"东安区","brand":"如家商旅","address":"黑龙江牡丹江东安区光华街575号"},{"name":"驿居酒店-哈尔滨阿城金京大厦店","hotelId":"E45122","openDate":"2025-12-29","rooms":43.0,"occupancy":0.326,"years":0,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":159.0,"otaRevenue":81.614,"applicationAmount":32.6456,"district":"阿城区","brand":null,"address":"黑龙江哈尔滨阿城区永泰广胡同4号金京花苑一层"},{"name":"如家 哈尔滨会展中心红旗大街公滨路地铁站店","hotelId":"45156","openDate":"2022-06-17","rooms":75.0,"occupancy":0.32,"years":4,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":160.0,"otaRevenue":139.6125,"applicationAmount":55.845,"district":"香坊区","brand":"如家","address":"黑龙江哈尔滨香坊区公滨路395号"},{"name":"驿居酒店 牛丹江高铁站大学城店","hotelId":"E45304","openDate":"2024-05-27","rooms":52.0,"occupancy":0.385,"years":2,"heat":"核心","position":"中高端","rating":4.8,"roomPrice":102.0,"otaRevenue":74.022,"applicationAmount":29.6088,"district":"东安区","brand":null,"address":"黑龙江牡丹江东安区市政路33号"}];
+let selectedHotel=null;
+const defaults={years:6,occupancy:82.8,platformRating:4.8,roomPrice:573.0,roomCount:134,otaRevenue:2318.3,preCredit:927.3,establishedDate:'2019-06-14'};
+
+function selected(name){return document.querySelector(`input[name="${name}"]:checked`)?.value;}
+function scoreYears(v){return v>=5?10:v>=3?8:5}
+function scoreHeat(v){return v==='core'?10:v==='normal'?5:0}
+function scorePosition(){const type=selected('hotelType');return (type==='高端'||type==='中端')?10:5}
+/* 评分卡文字写作“45%-55% 10分”，但55%-65%未单列。
+   结合配套63家运营表原评分结果核对，该连续区间沿用10分档，避免出现无定义区间。 */
+function scoreOccupancy(v){return v>=75?20:v>=65?15:v>=45?10:0}
+function scoreRating(v){return v>=4.8?10:v>=4.6?8:v>=4.3?5:0}
+function scorePrice(v){return v>=400?10:v>=300?7:v>=200?5:2}
+function scoreRooms(v){return v>=100?10:v>=80?7:v>=60?5:2}
+function scoreOta(v){return v>=1500?20:v>=1200?15:v>=1000?10:5}
+function formatMoney(v){return Number(v).toLocaleString('zh-CN',{minimumFractionDigits:1,maximumFractionDigits:1})}
+
+function riskMap(score,veto){
+  if(veto)return {grade:'否决',label:'负面信息触发',badge:'一票否决',coef:0,color:'var(--red)',suggestion:'不建议授信',conclusion:'检测到黑名单、诉讼法律纠纷等负面信息，已触发一票否决。建议终止当前预授信流程，并按照制度要求开展进一步核查。'};
+  if(score>=85)return {grade:'A',label:'优质',badge:'建议准入',coef:1,color:'var(--green)',suggestion:'建议按申请额度授信',conclusion:'客户主体经营稳定，区域与酒店定位较优，经营能力和收入表现良好。综合评分达到优质档，建议在核实基础资料及负面信息后，按申请额度推进授信。'};
+  if(score>=70)return {grade:'B',label:'良好',badge:'审慎准入',coef:.9,color:'var(--cyan)',suggestion:'建议按申请额度的90%授信',conclusion:'客户整体经营表现良好，具备一定偿债能力。建议结合流水、征信及实地调查结果，按照申请额度的90%审慎推进授信。'};
+  if(score>=60)return {grade:'C',label:'关注',badge:'降额审查',coef:.8,color:'var(--yellow)',suggestion:'建议按申请额度的80%授信',conclusion:'客户基本达到评分卡准入线，但部分经营或财务指标偏弱。建议补充核验关键材料，并按照申请额度的80%进行降额审查。'};
+  return {grade:'D',label:'谨慎',badge:'暂不准入',coef:0,color:'var(--red)',suggestion:'暂不建议授信',conclusion:'客户综合得分低于60分，当前经营或偿债能力不足以支持预授信。建议暂不准入，待核心指标改善后重新评估。'};
+}
+
+function update(){
+  const years=+$('years').value,occupancy=+$('occupancy').value,rating=+$('platformRating').value,price=+$('roomPrice').value,rooms=+$('roomCount').value,ota=+$('otaRevenue').value;
+  const y=scoreYears(years),h=scoreHeat(selected('heat')),p=scorePosition(),o=scoreOccupancy(occupancy),r=scoreRating(rating),pr=scorePrice(price),rc=scoreRooms(rooms),f=scoreOta(ota);
+  const basic=y+h+p,operation=o+r+pr+rc,finance=f,total=basic+operation+finance,veto=$('negativeInfo').checked,risk=riskMap(total,veto),credit=Math.min(ota*0.40*risk.coef,1000);
+  Object.assign(state,{years,occupancy,rating,price,rooms,ota,y,h,p,o,r,pr,rc,f,basic,operation,finance,total,veto,risk,credit});
+  $('yearsValue').textContent=years;$('yearsPoints').textContent=y;
+  $('heatPoints').textContent=h;
+  $('positionPoints').textContent=p;const positionLabel=(selected('hotelType')==='高端'||selected('hotelType')==='中端')?'中高端':(selected('hotelType')==='经济型'?'经济':'单体');$('positionText').textContent=positionLabel;
+  $('occupancyValue').textContent=Number(occupancy.toFixed(1));$('occupancyPoints').textContent=o;
+  $('ratingValue').textContent=rating.toFixed(1);$('ratingPoints').textContent=r;
+  $('priceValue').textContent=price;$('pricePoints').textContent=pr;
+  $('roomValue').textContent=Number(rooms.toFixed(0));$('roomPoints').textContent=rc;
+  $('otaValue').textContent=Number(ota.toFixed(1));$('otaPoints').textContent=f;
+  $('basicTotal').textContent=$('basicChip').textContent=basic;
+  $('operationTotal').textContent=$('operationChip').textContent=operation;
+  $('financeTotal').textContent=$('financeChip').textContent=finance;
+  $('totalScore').textContent=total;$('coefficient').textContent=risk.coef.toFixed(1);$('creditAmount').textContent=formatMoney(credit);
+  $('riskLabel').textContent=`${risk.grade} · ${risk.label}`;$('riskBadge').textContent=risk.badge;
+  $('gauge').style.setProperty('--score',total);$('gauge').style.setProperty('--gauge-color',risk.color);
+  $('riskBanner').style.borderColor=`color-mix(in srgb, ${risk.color} 35%, transparent)`;$('riskBadge').style.color=risk.color;
+  $('barBasic').style.width=`${basic/30*100}%`;$('barBasicText').textContent=`${basic} / 30`;
+  $('barOperation').style.width=`${operation/50*100}%`;$('barOperationText').textContent=`${operation} / 50`;
+  $('barFinance').style.width=`${finance/20*100}%`;$('barFinanceText').textContent=`${finance} / 20`;
+  updateLiveReport();
+}
+
+
+function updateLiveReport(){
+  const dimensions=[
+    {name:'主体状况',score:state.basic,max:30,ratio:state.basic/30,focus:'主体稳定性、区域热度及酒店定位'},
+    {name:'经营运营能力',score:state.operation,max:50,ratio:state.operation/50,focus:'入住率、平台评分、房间均价及房间数'},
+    {name:'财务偿债能力',score:state.finance,max:20,ratio:state.finance/20,focus:'OTA 收入及经营流水稳定性'}
+  ];
+  const weakest=[...dimensions].sort((a,b)=>a.ratio-b.ratio)[0];
+  const strongest=[...dimensions].sort((a,b)=>b.ratio-a.ratio)[0];
+  const conclusion=state.veto
+    ? '检测到黑名单、诉讼或重大法律纠纷等负面信息，系统已触发一票否决，当前评分仅作过程展示。'
+    : `${state.risk.grade} · ${state.risk.label}，综合得分 ${state.total} 分。${state.risk.conclusion}`;
+  const basis=`主体状况 ${state.basic}/30；经营运营 ${state.operation}/50；财务偿债 ${state.finance}/20。${strongest.name}表现相对突出。`;
+  const focus=state.veto
+    ? '负面信息已触发否决，建议暂停当前预授信流程并按制度开展专项核查。'
+    : `${weakest.name}为相对弱项，建议重点核验${weakest.focus}。`;
+  const action=state.veto
+    ? '不建议授信；待否决事项核查、处置并符合重新准入条件后再行评估。'
+    : `${state.risk.suggestion}，建议授信额度 ${formatMoney(state.credit)} 万元；最终以征信、流水、实地调查及审批意见为准。`;
+  $('liveReportConclusion').textContent=conclusion;
+  $('liveReportBasis').textContent=basis;
+  $('liveReportFocus').textContent=focus;
+  $('liveReportAction').textContent=action;
+  $('liveReportFocusRow').classList.toggle('veto',state.veto);
+  $('liveReportCard').style.borderColor=state.veto?'#f2c7cd':'#d4e4f3';
+  $('liveReportCard').style.background=state.veto?'linear-gradient(145deg,#fff8f9,#ffffff)':'linear-gradient(145deg,#f7fbff,#ffffff)';
+}
+
+function populateReport(){
+  const hotel=$('hotelName').value||'未填写酒店';const entity=$('entityName').value||'未填写品牌';
+  $('reportScore').textContent=state.total;$('reportRisk').textContent=`${state.risk.grade} · ${state.risk.label}`;$('reportSuggestion').textContent=state.risk.suggestion;
+  $('reportEntity').textContent=`${hotel} / ${entity}`;$('reportAddress').textContent=$('hotelAddress').value||'未填写';
+  $('reportBasic').textContent=`${state.basic} / 30 分`;$('reportOperation').textContent=`${state.operation} / 50 分`;$('reportFinance').textContent=`${state.finance} / 20 分`;
+  $('reportCoefficient').textContent=state.risk.coef.toFixed(1);$('reportCredit').textContent=`${formatMoney(state.credit)} 万元`;$('reportVeto').textContent=state.veto?'已触发':'未触发';$('reportConclusion').textContent=state.risk.conclusion;
+}
+
+function resetDemo(){
+  applyHotel(HOTEL_DATA[0],true);
+}
+
+
+function mapHotelType(position){
+  if(position==='中高端') return 'typeMid';
+  if(position==='经济') return 'typeEconomy';
+  return 'typeSingle';
+}
+function applyHotel(h,isReset=false){
+  if(!h) return;
+  selectedHotel=h;
+  $('hotelName').value=h.name||'';
+  $('hotelAddress').value=h.address||'';
+  $('entityName').value=h.brand||'';
+  $('licenseNo').value=h.hotelId||'';
+  $('establishedDate').value=h.openDate||'';
+  $('preCredit').value=window.matchMedia('(max-width: 780px)').matches ? '' : Number((h.applicationAmount||0).toFixed(1));
+
+  const typeId=mapHotelType(h.position);
+  if($(typeId)) $(typeId).checked=true;
+  $('isChain').checked=!!h.brand;
+  const heatId=h.heat==='核心'?'heatCore':(h.heat==='一般'?'heatNormal':'heatRemote');
+  if($(heatId)) $(heatId).checked=true;
+
+  $('years').value=Number(h.years||0);
+  $('occupancy').value=Number(((h.occupancy||0)*100).toFixed(1));
+  $('platformRating').value=Number(h.rating||0);
+  $('roomPrice').value=Number(h.roomPrice||0);
+  $('roomCount').value=Number(h.rooms||0);
+  $('otaRevenue').value=Number((h.otaRevenue||0).toFixed(1));
+  $('negativeInfo').checked=false;
+  hideHotelSuggestions();
+  update();
+}
+function normalizeSearch(s){return String(s||'').toLowerCase().replace(/\s+/g,'').replace(/[·\-—_（）()]/g,'')}
+function hotelMatches(query){
+  const q=normalizeSearch(query);
+  if(!q) return HOTEL_DATA.slice(0,10);
+  return HOTEL_DATA.filter(h=>{
+    const hay=[h.name,h.hotelId,h.brand,h.district,h.address,h.position].map(normalizeSearch).join('|');
+    return hay.includes(q);
+  }).slice(0,12);
+}
+function renderHotelSuggestions(query){
+  const box=$('hotelSuggestions'); if(!box) return;
+  const list=hotelMatches(query);
+  if(!list.length){box.innerHTML='<div class="hotel-search-empty">未匹配到酒店，可继续手工输入和编辑</div>';box.classList.add('show');return;}
+  box.innerHTML=list.map((h,i)=>`<div class="hotel-suggestion" data-hotel-index="${HOTEL_DATA.indexOf(h)}"><div class="hotel-suggestion-name">${h.name}</div><div class="hotel-suggestion-meta">${h.hotelId||'-'} · ${h.brand||'-'} · ${h.district||'-'} · ${h.address||''}</div></div>`).join('');
+  box.classList.add('show');
+  box.querySelectorAll('.hotel-suggestion').forEach(el=>el.addEventListener('mousedown',e=>{e.preventDefault();const h=HOTEL_DATA[+el.dataset.hotelIndex];applyHotel(h);}));
+}
+function hideHotelSuggestions(){const box=$('hotelSuggestions');if(box)box.classList.remove('show')}
+function initHotelSearch(){
+  const input=$('hotelName'); if(!input) return;
+  input.addEventListener('focus',()=>renderHotelSuggestions(input.value));
+  input.addEventListener('input',()=>{selectedHotel=null;renderHotelSuggestions(input.value)});
+  input.addEventListener('blur',()=>setTimeout(hideHotelSuggestions,160));
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Escape') hideHotelSuggestions();
+    if(e.key==='Enter'){
+      const first=$('hotelSuggestions')?.querySelector('.hotel-suggestion');
+      if(first){e.preventDefault();applyHotel(HOTEL_DATA[+first.dataset.hotelIndex]);}
+    }
+  });
+}
+
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',update));
+document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(el=>el.addEventListener('change',update));
+$('generateBtn').addEventListener('click',()=>{populateReport();$('reportModal').classList.add('open')});
+$('closeModal').addEventListener('click',()=>$('reportModal').classList.remove('open'));
+$('reportModal').addEventListener('click',e=>{if(e.target===$('reportModal'))$('reportModal').classList.remove('open')});
+$('resetBtn').addEventListener('click',resetDemo);
+$('copyBtn').addEventListener('click',async()=>{const text=`预授信评估结论：综合得分${state.total}分，风险评级${state.risk.grade}·${state.risk.label}，授信系数${state.risk.coef.toFixed(1)}，建议授信额度${formatMoney(state.credit)}万元。${state.risk.conclusion}`;try{await navigator.clipboard.writeText(text)}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1600)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('reportModal').classList.remove('open')});
+initHotelSearch();
+applyHotel(HOTEL_DATA[0],true);
+</script>
+
+<style id="ui-final-override">
+/* 基于参考图的白底蓝色金融科技驾驶舱重构 */
+html,body{
+    background:#f5f9ff!important;
+    color:#163b68!important;
+    overflow:hidden!important;
+}
+body{
+    background:
+    radial-gradient(circle at 90% -10%,rgba(40,130,255,.15),transparent 30%),
+    linear-gradient(180deg,#fff 0%,#f3f8ff 100%)!important;
+}
+.app{
+    max-width:none!important;
+    width:100vw!important;
+    height:100vh!important;
+    padding:10px 18px!important;
+}
+.topbar{
+    background:#fff!important;
+    border-bottom:1px solid #d9e8f7!important;
+}
+.hero{
+    padding:8px 0!important;
+}
+h1{
+    font-size:30px!important;
+    color:#123d6b!important;
+}
+.layout{
+    grid-template-columns:minmax(0,1fr) 430px!important;
+    gap:14px!important;
+}
+.main-column{
+    display:grid!important;
+    grid-template-columns:420px 520px 1fr!important;
+    grid-template-rows:1fr 170px!important;
+    gap:12px!important;
+}
+.panel{
+    background:#fff!important;
+    border:1px solid #d8e7f7!important;
+    box-shadow:0 8px 22px rgba(30,90,150,.08)!important;
+}
+.panel-head{
+    background:linear-gradient(90deg,#f0f7ff,#fff)!important;
+}
+.section-index{
+    background:#eaf4ff!important;
+    color:#1769e0!important;
+}
+input[type=text],input[type=number],input[type=date],select{
+    background:#fbfdff!important;
+    color:#173d61!important;
+}
+.result-panel{
+    background:linear-gradient(160deg,#fff,#f0f7ff)!important;
+}
+.gauge-score{
+    color:#1769e0!important;
+}
+.metric b{
+    color:#1769e0!important;
+}
+.metric:nth-child(2) b{
+    font-size:42px!important;
+    color:#095bd3!important;
+}
+.btn-primary{
+    background:linear-gradient(90deg,#1769e0,#18a8df)!important;
+}
+/* 评估解释说明直接固定展示 */
+.explain-panel{
+    display:block!important;
+}
+</style>
+
+
+<style id="xiaomi-mobile-responsive">
+/* =========================================================
+   小米手机 / 移动端响应式样式
+   仅在 <= 900px 生效；电脑端完全沿用原版本
+   ========================================================= */
+@media (max-width:900px){
+  html,body{
+    width:100%!important;height:auto!important;min-height:100%!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+    -webkit-text-size-adjust:100%;background:#f4f8fd!important;
+  }
+  body::before{display:none!important}
+  .app{
+    width:100%!important;height:auto!important;max-width:none!important;
+    margin:0!important;padding:0 10px 18px!important;display:block!important;overflow:visible!important;
+  }
+  .topbar{
+    position:sticky!important;top:0!important;z-index:50!important;height:48px!important;
+    margin:0 -10px!important;padding:0 12px!important;background:rgba(255,255,255,.96)!important;
+    box-shadow:0 3px 12px rgba(31,82,135,.08)!important;
+  }
+  .brand-mark{width:28px!important;height:28px!important;border-radius:8px!important}
+  .brand-mark svg{width:17px!important;height:17px!important}
+  .brand strong{font-size:12px!important}.brand span{display:none!important}
+  .top-actions{gap:4px!important}.status-pill{font-size:8px!important;padding:4px 7px!important}.demo-pill{display:none!important}
+
+  .hero{
+    height:auto!important;min-height:0!important;padding:10px 2px 8px!important;display:flex!important;
+    flex-direction:column!important;align-items:stretch!important;gap:8px!important;border-bottom:0!important;overflow:visible!important;
+  }
+  .eyebrow{display:none!important}
+  h1{font-size:20px!important;line-height:1.28!important;letter-spacing:-.2px!important;color:#123f6f!important}
+  .hero p{font-size:11px!important;line-height:1.55!important;margin:4px 0 0!important;white-space:normal!important;max-width:none!important;color:#6d849a!important}
+  .hero-kpis{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important;width:100%!important}
+  .mini-kpi{min-width:0!important;padding:7px 6px!important;border-radius:9px!important;text-align:center!important}
+  .mini-kpi span{font-size:8px!important}.mini-kpi b{font-size:14px!important;margin-top:1px!important}
+
+  .layout{
+    display:flex!important;flex-direction:column!important;width:100%!important;height:auto!important;
+    padding-top:0!important;gap:10px!important;overflow:visible!important;
+  }
+  /* 手机端实时评估结果置于全部评分模块之后 */
+  .sidebar{order:2!important;position:static!important;width:100%!important;height:auto!important;display:block!important;min-height:0!important}
+  .sidebar>.result-panel{height:auto!important;min-height:0!important;padding:12px!important}
+  .result-top h3{font-size:15px!important}.live{font-size:9px!important}
+  .gauge-wrap{margin:10px 0 8px!important}.gauge{width:132px!important;height:132px!important}.gauge::before{width:104px!important;height:104px!important}
+  .gauge-score{font-size:34px!important}.gauge-score small{font-size:11px!important}.gauge-content span{font-size:8px!important;margin-top:4px!important}
+  .risk-banner{padding:9px 10px!important;margin-bottom:8px!important;border-radius:9px!important}
+  .risk-banner .label{font-size:8px!important}.risk-banner b{font-size:14px!important}.risk-badge{font-size:9px!important;padding:5px 8px!important}
+  .result-grid{grid-template-columns:.8fr 1.4fr!important;gap:7px!important}
+  .metric{padding:9px!important;border-radius:9px!important}.metric span{font-size:8px!important}.metric b{font-size:16px!important}
+  .metric:nth-child(2) b,.metric-credit b{font-size:26px!important;line-height:1.05!important;color:#0a63e6!important}
+  .metric:nth-child(2) b small,.metric-credit b small{font-size:10px!important}
+  .breakdown{margin-top:10px!important}.breakdown-title{font-size:9px!important;margin-bottom:7px!important}
+  .bar-item{margin-bottom:8px!important}.bar-copy{font-size:9px!important;margin-bottom:4px!important}.bar{height:5px!important}
+  .live-report-card{margin-top:8px!important;padding:9px!important;border-radius:9px!important;max-height:none!important;overflow:visible!important}
+  .live-report-head h4{font-size:11px!important}.live-report-tag{font-size:7px!important}
+  .live-report-conclusion{font-size:9px!important;line-height:1.55!important;padding:8px!important}
+  .live-report-item{grid-template-columns:52px minmax(0,1fr)!important;gap:6px!important}.live-report-item span{font-size:8px!important}.live-report-item b{font-size:8.5px!important;line-height:1.45!important}
+  .action-stack{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;margin-top:9px!important}
+  .btn{height:38px!important;font-size:10px!important;border-radius:9px!important}
+
+  .main-column{
+    order:1!important;display:flex!important;flex-direction:column!important;width:100%!important;height:auto!important;
+    min-height:0!important;gap:10px!important;overflow:visible!important;
+  }
+  .main-column>.panel,.main-column>.rules-left{width:100%!important;height:auto!important;min-height:0!important;grid-column:auto!important;grid-row:auto!important}
+  .rules-left{display:flex!important;flex-direction:column!important}
+  .panel{border-radius:11px!important;overflow:hidden!important}
+  .panel-head{min-height:42px!important;padding:8px 10px!important;gap:6px!important}
+  .panel-title{gap:7px!important;min-width:0!important}.section-index{width:23px!important;height:23px!important;font-size:9px!important;border-radius:6px!important}
+  .panel-title h2{font-size:13px!important;white-space:normal!important;line-height:1.25!important}.panel-title small{font-size:8px!important;white-space:normal!important;line-height:1.3!important}
+  .score-chip{padding:4px 7px!important;font-size:8px!important;white-space:nowrap!important}
+  .panel-body{padding:9px 10px!important}
+
+  .form-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px 7px!important}
+  .field{gap:3px!important}.field.full{grid-column:1/-1!important}.field label{font-size:9px!important}.field label em{font-size:8px!important}
+  input[type=text],input[type=number],input[type=date],select{height:36px!important;font-size:11px!important;padding:0 9px!important;border-radius:8px!important}
+  .segmented{gap:5px!important}.segmented label{min-height:34px!important;font-size:9px!important;padding:5px!important;border-radius:8px!important}
+  .switch-row{padding:8px 9px!important;border-radius:8px!important}.switch-copy b{font-size:10px!important}.switch-copy small{font-size:8px!important;line-height:1.35!important;white-space:normal!important;max-width:none!important}
+  .switch{width:40px!important;height:22px!important}.slider::before{width:15px!important;height:15px!important;top:2px!important}.switch input:checked+.slider::before{transform:translateX(17px)!important}
+
+  .score-list{gap:0!important}.score-row{display:grid!important;grid-template-columns:minmax(0,1fr) 50px!important;grid-template-areas:"name points" "control control"!important;gap:5px 7px!important;padding:8px 0!important}
+  .score-name{grid-area:name!important}.points{grid-area:points!important;text-align:right!important}.control-line{grid-area:control!important;gap:7px!important}
+  .score-name b{font-size:10px!important}.score-name small{display:none!important}.points b{font-size:13px!important}.points span{font-size:8px!important}
+  .value-bubble{min-width:58px!important;height:28px!important;font-size:9px!important;border-radius:7px!important}
+  .score-foot{margin-top:2px!important;padding-top:6px!important}.score-foot span{font-size:9px!important}.score-foot strong{font-size:17px!important}
+  .decision-check{padding:7px!important}
+
+  .rules-left{padding:9px 10px!important}.rule-compact-head{margin-bottom:6px!important}.rule-compact-head h3{font-size:11px!important}.rule-compact-head span{font-size:8px!important}.rule-tag{font-size:7px!important}
+  .rule-grid{grid-template-columns:repeat(2,1fr)!important;gap:6px!important}.rule-item{padding:7px!important;font-size:8px!important}.rule-item b{font-size:10px!important}
+  .rule-note{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:7px!important;line-height:1.45!important}
+
+  .modal{padding:10px!important;align-items:flex-start!important;overflow-y:auto!important}
+  .modal-card{width:100%!important;max-height:none!important;margin:10px 0!important;border-radius:14px!important;overflow:visible!important}
+  .modal-head{padding:14px!important;position:sticky!important;top:0!important;z-index:2!important}.modal-head h3{font-size:15px!important}
+  .report{padding:14px!important}.report-hero{padding:12px!important;gap:10px!important}.report-score{font-size:34px!important}.report-summary b{font-size:15px!important}.report-summary span{font-size:9px!important}
+  .report-table{font-size:10px!important;margin-top:12px!important}.report-table td{padding:9px 6px!important}.report-conclusion{font-size:10px!important;line-height:1.6!important;padding:11px!important}
+  .modal-actions{padding:0 14px 14px!important;display:grid!important;grid-template-columns:1fr!important;gap:7px!important}
+}
+
+/* 更窄的小米/安卓机型 */
+@media (max-width:420px){
+  .app{padding:0 8px 16px!important}
+  .form-grid{grid-template-columns:1fr!important}
+  .field.full{grid-column:auto!important}
+  .hero h1,h1{font-size:18px!important}
+  .result-grid{grid-template-columns:1fr 1.35fr!important}
+  .metric:nth-child(2) b,.metric-credit b{font-size:23px!important}
+  .action-stack{grid-template-columns:1fr!important}
+}
+</style>
+
+
+<style id="final-dual-end-tuning">
+/* ===== PC端：仅强化实时评估结果中的核心数字，不改变原布局 ===== */
+@media (min-width:781px){
+  .gauge{
+    width:clamp(150px,10.5vw,188px)!important;
+    height:clamp(150px,10.5vw,188px)!important;
+  }
+  .gauge::before{
+    width:78%!important;
+    height:78%!important;
+  }
+  .gauge-score{
+    line-height:.95!important;
+    white-space:nowrap!important;
+  }
+  #totalScore{
+    font-size:clamp(48px,3.6vw,64px)!important;
+    font-weight:900!important;
+    letter-spacing:-2px!important;
+    color:#0b63d8!important;
+    font-variant-numeric:tabular-nums;
+  }
+  .gauge-score small{
+    font-size:clamp(15px,1.2vw,20px)!important;
+    font-weight:800!important;
+    color:#3d719f!important;
+    margin-left:2px!important;
+  }
+
+  .result-grid .metric:nth-child(2){
+    background:linear-gradient(145deg,#edf6ff,#ffffff)!important;
+    border:1px solid #8ec2ff!important;
+    box-shadow:0 10px 24px rgba(23,105,224,.10)!important;
+  }
+  .result-grid .metric:nth-child(2)>span{
+    color:#1769e0!important;
+    font-weight:800!important;
+  }
+  .result-grid .metric:nth-child(2)>b{
+    display:flex!important;
+    align-items:flex-end!important;
+    gap:3px!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+    margin-top:5px!important;
+  }
+  #creditAmount{
+    font-size:clamp(32px,2.8vw,48px)!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:-1.2px!important;
+    color:#075fdc!important;
+    font-variant-numeric:tabular-nums;
+  }
+  .result-grid .metric:nth-child(2) small{
+    font-size:clamp(11px,.9vw,14px)!important;
+    font-weight:800!important;
+    color:#347cc5!important;
+    margin-bottom:3px!important;
+  }
+}
+
+/* ===== 手机端：彻底隐藏PC白底头部，仅展示问卷式移动流程 ===== */
+@media (max-width:780px){
+  .app{display:none!important;}
+  .mobile-wizard{display:flex!important;}
+
+  /* 顶部不展示“两屏输入 一屏结果”等额外说明 */
+  .mw-sub{display:none!important;}
+  .mw-header{padding-top:calc(12px + env(safe-area-inset-top))!important;}
+  .mw-title{font-size:18px!important;}
+
+  /* 第三屏不额外展示“预授信评分结果”说明块，直接进入实时评估结果 */
+  #mwScreen3>.mw-intro{display:none!important;}
+
+  /* 经营信息页不展示授信系数规则 */
+  #mwScreen2 .rules-left,
+  #mwScreen2 .rule-card{display:none!important;}
+
+  /* 手机端实时评估只保留核心结果，不展示评分结构与评估解释说明 */
+  #mwScreen3 .breakdown,
+  #mwScreen3 .live-report-card{display:none!important;}
+
+  /* 不提供“完整评估报告”入口，避免进入评分解释说明页 */
+  #mwScreen3 #generateBtn{display:none!important;}
+  #mwScreen3 .action-stack{grid-template-columns:1fr!important;}
+
+  /* 手机上不展示报告弹窗 */
+  .modal{display:none!important;}
+
+  /* 综合得分更大、更醒目，同时兼容窄屏 */
+  .mobile-wizard .gauge{
+    width:min(58vw,220px)!important;
+    height:min(58vw,220px)!important;
+    min-width:178px!important;
+    min-height:178px!important;
+    margin:12px auto 16px!important;
+  }
+  .mobile-wizard .gauge::before{
+    width:78%!important;
+    height:78%!important;
+  }
+  .mobile-wizard .gauge-score{
+    white-space:nowrap!important;
+    line-height:.92!important;
+  }
+  .mobile-wizard #totalScore{
+    font-size:clamp(56px,17vw,76px)!important;
+    font-weight:900!important;
+    letter-spacing:-2px!important;
+    color:#ffffff!important;
+    text-shadow:0 6px 22px rgba(46,202,255,.18)!important;
+    font-variant-numeric:tabular-nums;
+  }
+  .mobile-wizard .gauge-score small{
+    font-size:clamp(18px,5vw,24px)!important;
+    color:#8fdcff!important;
+    font-weight:800!important;
+    margin-left:2px!important;
+  }
+  .mobile-wizard .gauge-content>span{
+    margin-top:9px!important;
+    font-size:13px!important;
+    color:#95b8cf!important;
+  }
+
+  /* 建议授信额度作为手机端主指标突出显示 */
+  .mobile-wizard .result-grid{
+    grid-template-columns:1fr 1.65fr!important;
+    gap:10px!important;
+  }
+  .mobile-wizard .result-grid .metric:nth-child(2){
+    background:linear-gradient(145deg,rgba(16,91,142,.72),rgba(10,52,88,.94))!important;
+    border:1px solid rgba(72,207,255,.34)!important;
+    box-shadow:0 12px 28px rgba(30,149,255,.14)!important;
+  }
+  .mobile-wizard .result-grid .metric:nth-child(2)>span{
+    color:#91c8e8!important;
+    font-weight:700!important;
+  }
+  .mobile-wizard .result-grid .metric:nth-child(2)>b{
+    display:flex!important;
+    align-items:flex-end!important;
+    gap:3px!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+    margin-top:7px!important;
+  }
+  .mobile-wizard #creditAmount{
+    font-size:clamp(36px,11vw,54px)!important;
+    font-weight:900!important;
+    line-height:1!important;
+    letter-spacing:-1.3px!important;
+    color:#57e0ff!important;
+    text-shadow:0 5px 18px rgba(41,206,255,.18)!important;
+    font-variant-numeric:tabular-nums;
+  }
+  .mobile-wizard .result-grid .metric:nth-child(2) small{
+    font-size:clamp(13px,3.8vw,17px)!important;
+    font-weight:800!important;
+    color:#9fd9f0!important;
+    margin-bottom:3px!important;
+  }
+
+  /* 第三屏去掉多余底部“第3/3屏”文案，画面更像结果页 */
+  #mwIndicator{font-size:10px!important;color:#698ca6!important;}
+}
+
+/* 小米等窄屏设备再缩一点，防止金额超过卡片 */
+@media (max-width:400px){
+  .mobile-wizard .result-grid{grid-template-columns:.8fr 1.7fr!important;}
+  .mobile-wizard #creditAmount{font-size:clamp(34px,10.5vw,46px)!important;}
+  .mobile-wizard #totalScore{font-size:clamp(54px,16vw,68px)!important;}
+}
+</style>
+
+<script>
+
+// ================= 手机端问卷三步流程，仅移动端启用 =================
+(function(){
+  const mq = window.matchMedia('(max-width: 780px)');
+  let inited = false;
+  let currentStep = 1;
+  function activateMobileWizard(){
+    if(!mq.matches || inited) return;
+    inited = true;
+    const wizard = document.getElementById('mobileWizard');
+    const screen1 = document.getElementById('mwScreen1');
+    const screen2 = document.getElementById('mwScreen2');
+    const screen3 = document.getElementById('mwScreen3');
+    const panels = document.querySelectorAll('.main-column > .panel');
+    const rules = document.querySelector('.main-column > .rules-left');
+    const resultPanel = document.querySelector('.sidebar > .result-panel');
+    const modal = document.getElementById('reportModal');
+    if(wizard) wizard.style.display = 'flex';
+    const mobilePreCredit = document.getElementById('preCredit');
+    if(mobilePreCredit) mobilePreCredit.value = '';
+    if(typeof update === 'function') update();
+
+    if(panels[0] && !screen1.contains(panels[0])) screen1.appendChild(panels[0]);
+    [panels[1], panels[2], panels[3], panels[4]].forEach(function(el){ if(el && !screen2.contains(el)) screen2.appendChild(el); });
+    if(resultPanel && !screen3.contains(resultPanel)) screen3.appendChild(resultPanel);
+    if(modal) document.body.appendChild(modal);
+
+    const prevBtn = document.getElementById('mwPrevBtn');
+    const nextBtn = document.getElementById('mwNextBtn');
+    const topBack = document.getElementById('mwTopBack');
+    const indicator = document.getElementById('mwIndicator');
+    const steps = Array.from(document.querySelectorAll('.mw-step'));
+    const screens = [screen1, screen2, screen3];
+
+    function updateStep(target){
+      currentStep = Math.max(1, Math.min(3, target));
+      screens.forEach(function(el,idx){ el.classList.toggle('active', idx===currentStep-1); });
+      steps.forEach(function(el,idx){
+        el.classList.toggle('active', idx===currentStep-1);
+        el.classList.toggle('done', idx<currentStep-1);
+      });
+      indicator.textContent = '第 ' + currentStep + ' / 3 屏';
+      prevBtn.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+      topBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+      nextBtn.textContent = currentStep === 1 ? '下一步' : (currentStep === 2 ? '提交评估' : '重新填写');
+      screens[currentStep-1].scrollTop = 0;
+    }
+
+    prevBtn.addEventListener('click', function(){ updateStep(currentStep-1); });
+    topBack.addEventListener('click', function(){ updateStep(currentStep-1); });
+    nextBtn.addEventListener('click', function(){
+      if(currentStep===1){ updateStep(2); return; }
+      if(currentStep===2){
+        if(typeof update === 'function') update();
+        updateStep(3);
+        return;
+      }
+      if(currentStep===3){ updateStep(1); return; }
+    });
+    steps.forEach(function(stepEl,idx){ stepEl.addEventListener('click', function(){ updateStep(idx+1); }); });
+    updateStep(1);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', activateMobileWizard);
+  }else{
+    activateMobileWizard();
+  }
+})();
+</script>
+
+<style id="mobile-hide-header-score-chips">
+@media (max-width:780px){
+  /* 手机端经营信息页：隐藏 30/30、42/50、15/20 等抬头分数，保留“一票否决” */
+  #mwScreen2 .score-chip:not(.danger-text){
+    display:none!important;
+  }
+}
+</style>
+
+
+<style id="mobile-result-credit-only-v2">
+@media (max-width:780px){
+  /* 手机端第三屏只展示建议授信额度 */
+  #mwScreen3 .gauge-wrap,
+  #mwScreen3 .risk-banner,
+  #mwScreen3 .breakdown,
+  #mwScreen3 .live-report-card,
+  #mwScreen3 .action-stack{display:none!important;}
+
+  #mwScreen3 .result-top{margin-bottom:18px!important;}
+  #mwScreen3 .result-top .live{display:none!important;}
+  #mwScreen3 .result-panel{padding:18px!important;min-height:320px!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;}
+
+  #mwScreen3 .result-grid{display:block!important;margin-top:18px!important;}
+  #mwScreen3 .result-grid .metric:first-child{display:none!important;}
+  #mwScreen3 .result-grid .metric:nth-child(2){
+    display:flex!important;
+    min-height:210px!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    align-items:center!important;
+    text-align:center!important;
+    padding:24px 16px!important;
+    border-radius:20px!important;
+    background:linear-gradient(160deg,rgba(12,75,124,.92),rgba(7,39,70,.98))!important;
+    border:1px solid rgba(83,210,255,.35)!important;
+    box-shadow:0 18px 40px rgba(17,139,230,.18), inset 0 0 35px rgba(46,190,255,.06)!important;
+  }
+  #mwScreen3 .result-grid .metric:nth-child(2)>span{
+    font-size:15px!important;
+    color:#a8d4ea!important;
+    font-weight:700!important;
+    letter-spacing:.4px!important;
+  }
+  #mwScreen3 .result-grid .metric:nth-child(2)>b{
+    margin-top:15px!important;
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:center!important;
+    gap:5px!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+  }
+  #mwScreen3 #creditAmount{
+    font-size:clamp(54px,17vw,76px)!important;
+    line-height:.95!important;
+    font-weight:900!important;
+    letter-spacing:-2px!important;
+    color:#5ce5ff!important;
+    text-shadow:0 8px 28px rgba(50,214,255,.20)!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+  #mwScreen3 .result-grid .metric:nth-child(2) small{
+    font-size:clamp(15px,4.4vw,20px)!important;
+    color:#a8d6eb!important;
+    font-weight:800!important;
+    margin-bottom:5px!important;
+  }
+
+  /* 手机基本信息新增联系方式输入框保持与其他字段一致 */
+  #mwScreen1 #contactInfo{width:100%!important;}
+}
+@media (max-width:390px){
+  #mwScreen3 #creditAmount{font-size:clamp(48px,15.5vw,66px)!important;}
+}
+</style>
+
+
+<style id="mobile-basic-info-cleanup">
+@media (max-width:780px){
+  /* 手机端基本信息：酒店编号不展示 */
+  #mwScreen1 .mobile-hide-hotel-id{
+    display:none!important;
+  }
+
+  /* 手机端基本信息：连锁品牌经营仅保留标题与开关 */
+  #mwScreen1 .mobile-hide-chain-desc{
+    display:none!important;
+  }
+  #mwScreen1 .switch-row:has(#isChain){
+    min-height:48px!important;
+    align-items:center!important;
+  }
+  #mwScreen1 .switch-row:has(#isChain) .switch-copy{
+    display:flex!important;
+    align-items:center!important;
+  }
+  #mwScreen1 .switch-row:has(#isChain) .switch-copy b{
+    margin:0!important;
+  }
+}
+</style>
+
+</body>
 </html>
