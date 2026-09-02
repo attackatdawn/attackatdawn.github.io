@@ -958,7 +958,7 @@
 - 酒店预填：新63家酒店运营数据(预核额)0806.xlsx
 - 评分规则：预授信评分卡(1).xlsx
 - 运营评分项严格使用“房间数”，不使用 RevPar。
-- 手机端申请额度默认及酒店联动后保持为空；最终建议授信额度按 min(OTA年收入 × 40% × 综合得分对应评级系数, 申请额度, 1000万元) 实时计算；申请额度为空时结果为0。
+- 手机端申请额度默认及酒店联动后保持为空；建议授信额度 = min(OTA年收入 × 40% × 综合得分对应评级系数, 1000万元)，若已填写申请额度，则最终建议授信额度不得超过申请额度。
 -->
 
 <div class="app">
@@ -1173,9 +1173,9 @@ function riskMap(score,veto){
 function update(){
   const years=+$('years').value,occupancy=+$('occupancy').value,rating=+$('platformRating').value,price=+$('roomPrice').value,rooms=+$('roomCount').value,ota=+$('otaRevenue').value;
   const y=scoreYears(years),h=scoreHeat(selected('heat')),p=scorePosition(),o=scoreOccupancy(occupancy),r=scoreRating(rating),pr=scorePrice(price),rc=scoreRooms(rooms),f=scoreOta(ota);
-  const basic=y+h+p,operation=o+r+pr+rc,finance=f,total=basic+operation+finance,veto=$('negativeInfo').checked,risk=riskMap(total,veto),const applicationAmount=+$('preCredit').value||0,
-        rawCredit=ota*0.40*risk.coef,
-        credit=applicationAmount>0?Math.min(rawCredit,applicationAmount,1000):0;
+  const basic=y+h+p,operation=o+r+pr+rc,finance=f,total=basic+operation+finance,veto=$('negativeInfo').checked,risk=riskMap(total,veto),baseCredit=Math.min(ota*0.40*risk.coef,1000),
+  applicationAmount=(+$('preCredit').value||0),
+  credit=applicationAmount>0?Math.min(baseCredit,applicationAmount):baseCredit;
   Object.assign(state,{years,occupancy,rating,price,rooms,ota,y,h,p,o,r,pr,rc,f,basic,operation,finance,total,veto,risk,credit});
   $('yearsValue').textContent=years;$('yearsPoints').textContent=y;
   $('heatPoints').textContent=h;
