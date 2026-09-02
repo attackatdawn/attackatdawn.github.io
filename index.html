@@ -1060,7 +1060,7 @@
         <div class="result-top"><h3>实时评估结果</h3><span class="live"><i></i>LIVE</span></div>
         <div class="gauge-wrap"><div class="gauge" id="gauge"><div class="gauge-content"><div class="gauge-score"><span id="totalScore">100</span><small>分</small></div><span>综合得分</span></div></div></div>
         <div class="risk-banner" id="riskBanner"><div><span class="label">风险评级</span><b id="riskLabel">A · 优质</b></div><span class="risk-badge" id="riskBadge">建议准入</span></div>
-        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b></div></div>
+        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b><a class="mobile-contact-manager" href="https://work.weixin.qq.com/ca/cawcde57e7421f6ff2" aria-label="通过企业微信联系客户经理"><span class="mobile-contact-manager-icon" aria-hidden="true">⌁</span><span>点我联系客户经理</span><span class="mobile-contact-manager-arrow" aria-hidden="true">›</span></a></div></div>
         <div class="breakdown"><div class="breakdown-title"><span>评分结构</span><span>自动更新</span></div>
           <div class="bar-item"><div class="bar-copy"><span>主体状况</span><span id="barBasicText">30 / 30</span></div><div class="bar"><i id="barBasic" style="width:100%"></i></div></div>
           <div class="bar-item"><div class="bar-copy"><span>经营运营能力</span><span id="barOperationText">42 / 50</span></div><div class="bar"><i id="barOperation" style="width:84%"></i></div></div>
@@ -1853,6 +1853,60 @@ input[type=text],input[type=number],input[type=date],select{
   }
   #mwScreen1 .switch-row:has(#isChain) .switch-copy b{
     margin:0!important;
+  }
+}
+</style>
+
+<style id="mobile-contact-manager-style">
+/* 企业微信客户经理入口仅在手机端评估结果中显示 */
+.mobile-contact-manager{display:none}
+@media (max-width:780px){
+  #mwScreen3 .mobile-contact-manager{
+    display:flex!important;
+    width:min(100%,290px)!important;
+    min-height:50px!important;
+    margin-top:26px!important;
+    padding:0 17px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:10px!important;
+    border:1px solid rgba(134,227,255,.34)!important;
+    border-radius:14px!important;
+    background:linear-gradient(100deg,#267cff 0%,#24bdf2 100%)!important;
+    box-shadow:0 13px 28px rgba(28,139,244,.26),inset 0 1px 0 rgba(255,255,255,.18)!important;
+    color:#fff!important;
+    font-size:15px!important;
+    font-weight:800!important;
+    letter-spacing:.2px!important;
+    line-height:1!important;
+    text-decoration:none!important;
+    -webkit-tap-highlight-color:transparent!important;
+    transition:transform .16s ease,filter .16s ease,box-shadow .16s ease!important;
+  }
+  #mwScreen3 .mobile-contact-manager:active{
+    transform:translateY(1px) scale(.985)!important;
+    filter:brightness(.94)!important;
+    box-shadow:0 7px 17px rgba(28,139,244,.22)!important;
+  }
+  #mwScreen3 .mobile-contact-manager-icon{
+    width:25px!important;
+    height:25px!important;
+    display:grid!important;
+    place-items:center!important;
+    flex:none!important;
+    border-radius:8px!important;
+    background:rgba(255,255,255,.16)!important;
+    color:#eaffff!important;
+    font-size:20px!important;
+    font-weight:900!important;
+    transform:rotate(-18deg)!important;
+  }
+  #mwScreen3 .mobile-contact-manager-arrow{
+    margin-left:auto!important;
+    color:#e8fbff!important;
+    font-size:24px!important;
+    font-weight:500!important;
+    line-height:1!important;
   }
 }
 </style>
