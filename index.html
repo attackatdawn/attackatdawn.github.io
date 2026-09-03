@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>文旅乐贷 · 预授信评分系统</title>
+  <title>文旅乐贷 · 预授信系统</title>
   <style>
     :root{
       --bg:#06111f;
@@ -975,7 +975,7 @@
   <section class="hero">
     <div>
       <div class="eyebrow">Harbin Branch · Culture & Tourism Loan</div>
-      <h1>文旅乐贷 · 预授信评分系统</h1>
+      <h1>文旅乐贷 · 预授信系统</h1>
       <p>将 Excel 评分卡转化为可交互的数字化评估流程：录入经营信息，系统实时计算主体、运营及财务得分，并同步输出风险评级、授信系数与建议额度。</p>
     </div>
     <div class="hero-kpis"><div class="mini-kpi"><span>评分维度</span><b>3</b></div><div class="mini-kpi"><span>核心指标</span><b>8</b></div><div class="mini-kpi"><span>最高分</span><b>100</b></div></div>
@@ -1060,7 +1060,7 @@
         <div class="result-top"><h3>实时评估结果</h3><span class="live"><i></i>LIVE</span></div>
         <div class="gauge-wrap"><div class="gauge" id="gauge"><div class="gauge-content"><div class="gauge-score"><span id="totalScore">100</span><small>分</small></div><span>综合得分</span></div></div></div>
         <div class="risk-banner" id="riskBanner"><div><span class="label">风险评级</span><b id="riskLabel">A · 优质</b></div><span class="risk-badge" id="riskBadge">建议准入</span></div>
-        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b><a class="mobile-contact-manager" href="https://work.weixin.qq.com/ca/cawcde57e7421f6ff2" aria-label="通过企业微信联系客户经理"><span class="mobile-contact-manager-icon" aria-hidden="true">⌁</span><span>点我联系客户经理</span><span class="mobile-contact-manager-arrow" aria-hidden="true">›</span></a></div></div>
+        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b><a class="mobile-contact-manager" href="https://work.weixin.qq.com/ca/cawcde57e7421f6ff2" aria-label="通过企业微信联系产品经理赵经理"><span class="mobile-contact-manager-icon" aria-hidden="true">⌁</span><span class="mobile-contact-manager-copy"><strong>联系产品经理</strong><small>赵经理 · 18646575567</small></span><span class="mobile-contact-manager-arrow" aria-hidden="true">›</span></a></div></div>
         <div class="breakdown"><div class="breakdown-title"><span>评分结构</span><span>自动更新</span></div>
           <div class="bar-item"><div class="bar-copy"><span>主体状况</span><span id="barBasicText">30 / 30</span></div><div class="bar"><i id="barBasic" style="width:100%"></i></div></div>
           <div class="bar-item"><div class="bar-copy"><span>经营运营能力</span><span id="barOperationText">42 / 50</span></div><div class="bar"><i id="barOperation" style="width:84%"></i></div></div>
@@ -1089,7 +1089,7 @@
       <div class="mw-header-top">
         <div class="mw-back" id="mwTopBack">‹</div>
         <div style="flex:1;text-align:center">
-          <div class="mw-title">文旅乐贷 · 预授信评分系统</div>
+          <div class="mw-title">文旅乐贷 · 预授信系统</div>
           
         </div>
         <div class="mw-menu">⋯</div>
@@ -1900,6 +1900,27 @@ input[type=text],input[type=number],input[type=date],select{
     font-size:20px!important;
     font-weight:900!important;
     transform:rotate(-18deg)!important;
+  }
+  #mwScreen3 .mobile-contact-manager-copy{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:4px!important;
+    color:#fff!important;
+    text-align:left!important;
+  }
+  #mwScreen3 .mobile-contact-manager-copy strong{
+    color:#fff!important;
+    font-size:15px!important;
+    font-weight:800!important;
+    line-height:1.05!important;
+  }
+  #mwScreen3 .mobile-contact-manager-copy small{
+    color:#d8f6ff!important;
+    font-size:11px!important;
+    font-weight:600!important;
+    letter-spacing:.25px!important;
+    line-height:1.05!important;
   }
   #mwScreen3 .mobile-contact-manager-arrow{
     margin-left:auto!important;
