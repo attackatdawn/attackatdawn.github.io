@@ -1060,7 +1060,7 @@
         <div class="result-top"><h3>实时评估结果</h3><span class="live"><i></i>LIVE</span></div>
         <div class="gauge-wrap"><div class="gauge" id="gauge"><div class="gauge-content"><div class="gauge-score"><span id="totalScore">100</span><small>分</small></div><span>综合得分</span></div></div></div>
         <div class="risk-banner" id="riskBanner"><div><span class="label">风险评级</span><b id="riskLabel">A · 优质</b></div><span class="risk-badge" id="riskBadge">建议准入</span></div>
-        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b><a class="mobile-contact-manager" href="https://work.weixin.qq.com/ca/cawcde57e7421f6ff2" aria-label="通过企业微信联系产品经理赵经理"><span class="mobile-contact-manager-icon" aria-hidden="true">⌁</span><span class="mobile-contact-manager-copy"><strong>联系产品经理</strong><small>赵经理 · 18646575567</small></span><span class="mobile-contact-manager-arrow" aria-hidden="true">›</span></a></div></div>
+        <div class="result-grid"><div class="metric"><span>对应系数</span><b id="coefficient">1.0</b></div><div class="metric"><span>建议授信额度</span><b><span id="creditAmount">927.3</span><small> 万元</small></b><a class="mobile-contact-manager" href="tel:18646575567" aria-label="拨打产品经理赵经理电话18646575567"><span class="mobile-contact-manager-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7.2 3.8 9.5 8c.3.6.2 1.2-.3 1.6l-1.4 1.2c1 2.2 2.8 4 5 5l1.2-1.4c.4-.5 1-.6 1.6-.3l4.2 2.3c.5.3.8.9.7 1.5l-.4 2c-.1.6-.7 1.1-1.3 1.1C10.1 21 3 13.9 3 5.2c0-.6.5-1.2 1.1-1.3l2-.4c.5-.1 1 .1 1.1.3Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="mobile-contact-manager-copy"><strong>联系产品经理</strong><small>赵经理&nbsp;&nbsp;18646575567</small></span><span class="mobile-contact-manager-action" aria-hidden="true">拨打</span></a></div></div>
         <div class="breakdown"><div class="breakdown-title"><span>评分结构</span><span>自动更新</span></div>
           <div class="bar-item"><div class="bar-copy"><span>主体状况</span><span id="barBasicText">30 / 30</span></div><div class="bar"><i id="barBasic" style="width:100%"></i></div></div>
           <div class="bar-item"><div class="bar-copy"><span>经营运营能力</span><span id="barOperationText">42 / 50</span></div><div class="bar"><i id="barOperation" style="width:84%"></i></div></div>
@@ -1858,75 +1858,83 @@ input[type=text],input[type=number],input[type=date],select{
 </style>
 
 <style id="mobile-contact-manager-style">
-/* 企业微信客户经理入口仅在手机端评估结果中显示 */
+/* 产品经理电话入口仅在手机端评估结果中显示 */
 .mobile-contact-manager{display:none}
 @media (max-width:780px){
   #mwScreen3 .mobile-contact-manager{
     display:flex!important;
-    width:min(100%,290px)!important;
-    min-height:50px!important;
-    margin-top:26px!important;
-    padding:0 17px!important;
+    width:min(100%,320px)!important;
+    min-height:64px!important;
+    margin-top:24px!important;
+    padding:9px 10px!important;
     align-items:center!important;
-    justify-content:center!important;
-    gap:10px!important;
-    border:1px solid rgba(134,227,255,.34)!important;
-    border-radius:14px!important;
-    background:linear-gradient(100deg,#267cff 0%,#24bdf2 100%)!important;
-    box-shadow:0 13px 28px rgba(28,139,244,.26),inset 0 1px 0 rgba(255,255,255,.18)!important;
+    justify-content:flex-start!important;
+    gap:11px!important;
+    border:1px solid rgba(101,213,255,.28)!important;
+    border-radius:16px!important;
+    background:linear-gradient(120deg,rgba(9,49,81,.96),rgba(7,33,58,.94))!important;
+    box-shadow:0 13px 30px rgba(1,20,39,.22),inset 0 1px 0 rgba(180,236,255,.08)!important;
     color:#fff!important;
-    font-size:15px!important;
-    font-weight:800!important;
-    letter-spacing:.2px!important;
-    line-height:1!important;
     text-decoration:none!important;
     -webkit-tap-highlight-color:transparent!important;
-    transition:transform .16s ease,filter .16s ease,box-shadow .16s ease!important;
+    transition:transform .16s ease,border-color .16s ease,background .16s ease!important;
   }
   #mwScreen3 .mobile-contact-manager:active{
     transform:translateY(1px) scale(.985)!important;
-    filter:brightness(.94)!important;
-    box-shadow:0 7px 17px rgba(28,139,244,.22)!important;
+    border-color:rgba(87,235,190,.45)!important;
+    background:linear-gradient(120deg,rgba(10,57,88,.98),rgba(7,38,63,.96))!important;
   }
   #mwScreen3 .mobile-contact-manager-icon{
-    width:25px!important;
-    height:25px!important;
+    width:40px!important;
+    height:40px!important;
     display:grid!important;
     place-items:center!important;
     flex:none!important;
-    border-radius:8px!important;
-    background:rgba(255,255,255,.16)!important;
-    color:#eaffff!important;
-    font-size:20px!important;
-    font-weight:900!important;
-    transform:rotate(-18deg)!important;
+    border-radius:13px!important;
+    background:linear-gradient(145deg,#38d7a5,#1ca9bd)!important;
+    box-shadow:0 7px 17px rgba(31,195,167,.22),inset 0 1px 0 rgba(255,255,255,.24)!important;
+    color:#fff!important;
+  }
+  #mwScreen3 .mobile-contact-manager-icon svg{
+    width:22px!important;
+    height:22px!important;
   }
   #mwScreen3 .mobile-contact-manager-copy{
     display:flex!important;
     flex-direction:column!important;
     align-items:flex-start!important;
-    gap:4px!important;
-    color:#fff!important;
+    gap:5px!important;
+    min-width:0!important;
     text-align:left!important;
   }
   #mwScreen3 .mobile-contact-manager-copy strong{
-    color:#fff!important;
-    font-size:15px!important;
-    font-weight:800!important;
+    color:#8fbfd8!important;
+    font-size:11px!important;
+    font-weight:700!important;
+    letter-spacing:.4px!important;
     line-height:1.05!important;
   }
   #mwScreen3 .mobile-contact-manager-copy small{
-    color:#d8f6ff!important;
-    font-size:11px!important;
-    font-weight:600!important;
-    letter-spacing:.25px!important;
+    color:#f4fbff!important;
+    font-size:14px!important;
+    font-weight:800!important;
+    letter-spacing:.15px!important;
     line-height:1.05!important;
+    white-space:nowrap!important;
   }
-  #mwScreen3 .mobile-contact-manager-arrow{
+  #mwScreen3 .mobile-contact-manager-action{
     margin-left:auto!important;
-    color:#e8fbff!important;
-    font-size:24px!important;
-    font-weight:500!important;
+    min-width:44px!important;
+    height:28px!important;
+    display:grid!important;
+    place-items:center!important;
+    flex:none!important;
+    border:1px solid rgba(90,234,191,.28)!important;
+    border-radius:9px!important;
+    background:rgba(56,215,165,.10)!important;
+    color:#64e8bf!important;
+    font-size:12px!important;
+    font-weight:800!important;
     line-height:1!important;
   }
 }
